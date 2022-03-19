@@ -10,7 +10,7 @@ function Board(){
   const dispatch = useDispatch();
   // dispatch(Actions.createBoard());
   useEffect(() => {
-     dispatch(Actions.createBoard());
+     Actions.createBoard();
   }, []);
   const board = useSelector((state) => state.game.board);
   
@@ -29,12 +29,13 @@ function Board(){
     //need simplify
     else if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
         // clearSelectionDispatch();
-      dispatch(Actions.clearSelectionDispatch(board));
+      Actions.clearSelectionDispatch(board);
       // console.log(currentSelected);
     
     } else {
-      dispatch(Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected));  
-      // dispatch(Actions.addPlayerPiece(board, "player1", rowIndex, cellIndex));
+
+      Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected);  
+
       // console.log(currentSelected);
     }
   } 
