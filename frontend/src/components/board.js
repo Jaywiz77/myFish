@@ -1,111 +1,137 @@
-import React from "react";
+import React,{useEffect} from "react";
 import "../styles.css";
-import {Hex} from "./hex"
-
+import { Hex } from "./hex"
+import { useDispatch, useSelector } from "react-redux";
+import * as Actions from "../store/actions"
 const r = 100;
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
 const height = rowsLengthList.length - 1;
-const boardItems = ["fish", "fish2", "fish3", "empty"];
-// const length = [5, 6, 7, 8, 9, 8, 7, 6, 5];
-function createBoard() {
+  // const boardItems = ["fish", "fish2", "fish3", "empty"];
+  // let rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+// const boardItems = ["fish", "fish2", "fish3", "empty"];
+// // const length = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+// function createBoard() {
 
-  let board = rowsLengthList.map(length => new Array(length).fill().map(
-    () => [boardItems[Math.floor(Math.random() * boardItems.length)],"white"])
-  )
+//   let board = rowsLengthList.map(length => new Array(length).fill().map(
+//     () => [boardItems[Math.floor(Math.random() * boardItems.length)],"white"])
+//   )
 
-  return board
-}
-
-function clearSelection(board) {
-
-  board.map(arrs => {
-    arrs.forEach((part, index, arr) => {
-      arr[index][1] = "white";
-    });
-  })
-  return board
-}
-
-
-
-
-// function put(board, rowIndex, cellIndex, side) {
-//   const newBoard = board.map(row => [...row]);
-//   newBoard[rowIndex][cellIndex] = side;
-//   return newBoard;
+//   return board
 // }
 
-function selectedAction(board, cellToChange, side) { //side = highlighted or not
+// function clearSelection(board) {
 
-  const newBoard = clearSelection(board);
-  cellToChange.map(arr => {
-    //arr sample = [rowIndex,cellIndex]
-    newBoard[arr[0]][arr[1]][1] = side;
-  })
+//   board.map(arrs => {
+//     arrs.forEach((part, index, arr) => {
+//       arr[index][1] = "white";
+//     });
+//   })
+//   return board
+// }
+
+
+
+
+// // function put(board, rowIndex, cellIndex, side) {
+// //   const newBoard = board.map(row => [...row]);
+// //   newBoard[rowIndex][cellIndex] = side;
+// //   return newBoard;
+// // }
+
+// function selectedAction(board, cellToChange, side) { //side = highlighted or not
+
+//   const newBoard = clearSelection(board);
+//   cellToChange.map(arr => {
+//     //arr sample = [rowIndex,cellIndex]
+//     newBoard[arr[0]][arr[1]][1] = side;
+//   })
 
 
   
-  return newBoard;
-}
+//   return newBoard;
+// }
 
-  const changeSide = (side,currentSelected) =>{
-    if (side[0] === currentSelected[0] && currentSelected[1] === side[1]) {
-      return ["", "white"]
-    } else {
-      return  ["","selected"]
-    }
-  }
+//   const changeSide = (side,currentSelected) =>{
+//     if (side[0] === currentSelected[0] && currentSelected[1] === side[1]) {
+//       return ["", "white"]
+//     } else {
+//       return  ["","selected"]
+//     }
+//   }
 
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "selectedAction":
-      return {
-        ...state,
-        board: selectedAction(
-          state.board,
-          action.payload.cellToChange,
-          state.currentSide[1],
-        ),
-        currentSide: changeSide([action.payload.rowIndex,action.payload.cellIndex],state.currentSelected),
-        currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
+// function reducer(state, action) {
+//   switch (action.type) {
+//     case "selectedAction":
+//       return {
+//         ...state,
+//         board: selectedAction(
+//           state.board,
+//           action.payload.cellToChange,
+//           state.currentSide[1],
+//         ),
+//         currentSide: changeSide([action.payload.rowIndex,action.payload.cellIndex],state.currentSelected),
+//         currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
 
         
-      };
-    case "clear":
-      return {
-        ...state,
-        board: clearSelection(state.board),
-        currentSide: ["fish", "selected"],
-        currentSelected:"",
-      }
-    default:
-      return state;
-  }
-}
+//       };
+//     case "clear":
+//       return {
+//         ...state,
+//         board: clearSelection(state.board),
+//         currentSide: ["fish", "selected"],
+//         currentSelected:"",
+//       }
+//     default:
+//       return state;
+//   }
+// }
 
 
 
-export default function Board() {
-  const [state, dispatch] = React.useReducer(reducer, {
-    board: createBoard(),
-    currentSide: ["fish", "selected"],
-    currentSelected: ""
-  });
-  console.log(state.board);
+function Board(){
+  const dispatch = useDispatch();
+  // dispatch(Actions.createBoard());
+  useEffect(() => {
+     dispatch(Actions.createBoard());
+  }, []);
+
+
+    // const initial = createBoard();
+ 
+  // dispatch({      type: "updateState",
+  //     payload: { initial },})
+
+  const board = useSelector((state) => state.game.board);
+  
+
+  const currentSelected = useSelector((state) => state.game.currentSelected);
+  // console.log(board);
+  // const [state, dispatch] = React.useReducer(reducer, {
+  //   board: createBoard(),
+  //   currentSide: ["fish", "selected"],
+  //   currentSelected: ""
+  // });
+  // console.log(state.board);
   //onClick functions
   const cellOnClick = (rowIndex, cellIndex, side) => {
     // console.log("selected", [rowIndex,cellIndex]);
-    // console.log("currentSelected", state.currentSelected);
+    // console.log("currentSelected",side);
     // console.log();
 
     //need simplify
-    if (rowIndex === state.currentSelected[0] && state.currentSelected[1] === cellIndex ) {
-      clearSelectionDispatch();
+    if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
+        // clearSelectionDispatch();
+      dispatch(Actions.clearSelectionDispatch(board));
+      // console.log(currentSelected);
+    
     } else {
       calculatePath(rowIndex, cellIndex);
+
+      // console.log(currentSelected);
     }
   } 
+
 
 
   //callculate path to highlight
@@ -188,9 +214,9 @@ export default function Board() {
 
   return (
     <div className="App" style={{ width: "1000px", marginTop: "35px" }}>
-      {/* <button onClick={calculatePath(4,4)}>sasd</button> */}
+
       <div>
-        {state.board.map((row, rowIndex) => {
+        {board.map((row, rowIndex) => {
           return (
             <div
               style={{
@@ -216,3 +242,5 @@ export default function Board() {
     </div>
   );
 }
+
+export default Board;

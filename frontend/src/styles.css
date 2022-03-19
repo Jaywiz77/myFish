@@ -37,6 +37,10 @@
   background-position: center;
 }
 
+.hex.player div {
+  background-color: #faf !important;
+}
+
 .hex.white div {
   background-color: aliceblue;
 }
