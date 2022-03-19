@@ -11,7 +11,9 @@ function App() {
       <SocketReceiver />
       <div className="App bg">
         <div className="bar"></div>
+        <GameRoom/>
       </div>
+      
     </Provider>
   );
 }

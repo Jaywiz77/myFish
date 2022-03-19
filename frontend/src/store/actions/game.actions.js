@@ -48,6 +48,7 @@ export const selectedAction = (
   blockers,
   currentSelected
 ) => {
+  console.log('-');
   //calculate the path
   const cellToChange = calculatePath(rowIndex,cellIndex,blockers)
   const highlight = changeHighlight([rowIndex, cellIndex], currentSelected);
@@ -58,9 +59,8 @@ export const selectedAction = (
 
   });
 
-  const newSide = changeSide([rowIndex, cellIndex], currentSelected);
   socketSender.broadcastToAll({
-    type: "selectedAction",
+    type: "SELECTED_ACTION",
     payload: { newBoard, highlight, rowIndex, cellIndex },
   });
 };
