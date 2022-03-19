@@ -1,6 +1,5 @@
 export const Hex = props => {
-  const { A, B, side,color = "", ...divProps } = props;
-
+  const { test,side,color = "", ...divProps } = props;
   return (
     <div
       {...divProps}

@@ -12,48 +12,34 @@ function Board(){
   useEffect(() => {
      Actions.createBoard();
   }, []);
-
-
-
   const board = useSelector((state) => state.game.board);
   
 
   const currentSelected = useSelector((state) => state.game.currentSelected);
   const blockers = useSelector((state) => state.game.blockers);
   const currentSide = useSelector((state) => state.game.currentSide);
+  const gamePhase = useSelector((state) => state.game.gamePhase);
 
   const cellOnClick = (rowIndex, cellIndex, side) => {
 
+    if (gamePhase === "setPlayerPieces") {
+      dispatch(Actions.addPlayerPiece(board, "player1", rowIndex, cellIndex));
+    }
+
     //need simplify
-    if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
+    else if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
         // clearSelectionDispatch();
       Actions.clearSelectionDispatch(board);
       // console.log(currentSelected);
     
     } else {
+
       Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected);  
 
       // console.log(currentSelected);
     }
   } 
 
-
-
-
-
-  //clear path selection highlight
-  const clearSelectionDispatch = () => {
-
-    dispatch({
-      type: "clear"
-    })
-  }
-  const addImage = () => {
-    
-  }
-
-
-  // calculatePath(4, 5);
 
   return (
     <div className="App" style={{ width: "1000px", marginTop: "35px" }}>
@@ -73,6 +59,7 @@ function Board(){
                   id={`${rowIndex},${cellIndex}`}
                   side={side[0]}
                   color={side[1]}
+                  test="23"
                   key={`${rowIndex},${cellIndex}`}
                   style={{ height: `${r}px`, width: `${r}px` }}
                   onClick={ ()=> cellOnClick(rowIndex,cellIndex,side)}

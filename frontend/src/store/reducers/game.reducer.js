@@ -1,15 +1,16 @@
+import { act } from 'react-dom/test-utils';
 import * as Actions from '../actions';
 
 const initialBoard = [
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]]
+  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["player1", "white"], ["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["player2", "white"], ["white", "white"],["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["player3", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["player4", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"],["white", "white"],["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]],
+  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]]
   
 ]
 
@@ -19,7 +20,8 @@ let initialState = {
     currentSelected: ["", ""],
     outOfPlay: [],
     blockers: new Set(["4,3", "4,4"]),
-    turn:0,
+  turn: 0,
+    gamePhase:"setPlayerPieces",
     player1: [],
     player2: []
     
@@ -32,15 +34,18 @@ function game(state=initialState, action) {
         ...state,
         board: action.payload.board,
       }
-    case "selectedAction":
-      console.log('sd')
+        case "SET_PIECE":
       return {
         ...state,
         board: action.payload.newBoard,
-        currentSide: action.payload.newSide,
         currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
-
-        
+      }
+    case "SELECTED_ACTION":
+      return {
+        ...state,
+        board: action.payload.newBoard,
+        currentSide: action.payload.highlight,  //css
+        currentSelected:[action.payload.rowIndex,action.payload.cellIndex] //cell coordinate
       };
     case "CLEAR":
       return {
@@ -49,6 +54,11 @@ function game(state=initialState, action) {
         currentSide: ["fish", "selected"],
         currentSelected: ["",""],
       };
+    case "CHANGE_PHASE":
+      return {
+        ...state,
+        gamePhase:action.payload.newPhase
+      }
 
     default:
       return state;
