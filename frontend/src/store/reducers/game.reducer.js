@@ -18,7 +18,7 @@ let initialState = {
     currentSide: ["fish", "selected"],
     currentSelected: ["", ""],
     outOfPlay: [],
-    blockers: [],
+    blockers: new Set(["4,3","4,4"]),
     player1: [],
     player2: []
     

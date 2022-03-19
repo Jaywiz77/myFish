@@ -6,86 +6,6 @@ import * as Actions from "../store/actions"
 const r = 100;
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
 const height = rowsLengthList.length - 1;
-  // const boardItems = ["fish", "fish2", "fish3", "empty"];
-  // let rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
-// const boardItems = ["fish", "fish2", "fish3", "empty"];
-// // const length = [5, 6, 7, 8, 9, 8, 7, 6, 5];
-// function createBoard() {
-
-//   let board = rowsLengthList.map(length => new Array(length).fill().map(
-//     () => [boardItems[Math.floor(Math.random() * boardItems.length)],"white"])
-//   )
-
-//   return board
-// }
-
-// function clearSelection(board) {
-
-//   board.map(arrs => {
-//     arrs.forEach((part, index, arr) => {
-//       arr[index][1] = "white";
-//     });
-//   })
-//   return board
-// }
-
-
-
-
-// // function put(board, rowIndex, cellIndex, side) {
-// //   const newBoard = board.map(row => [...row]);
-// //   newBoard[rowIndex][cellIndex] = side;
-// //   return newBoard;
-// // }
-
-// function selectedAction(board, cellToChange, side) { //side = highlighted or not
-
-//   const newBoard = clearSelection(board);
-//   cellToChange.map(arr => {
-//     //arr sample = [rowIndex,cellIndex]
-//     newBoard[arr[0]][arr[1]][1] = side;
-//   })
-
-
-  
-//   return newBoard;
-// }
-
-//   const changeSide = (side,currentSelected) =>{
-//     if (side[0] === currentSelected[0] && currentSelected[1] === side[1]) {
-//       return ["", "white"]
-//     } else {
-//       return  ["","selected"]
-//     }
-//   }
-
-
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case "selectedAction":
-//       return {
-//         ...state,
-//         board: selectedAction(
-//           state.board,
-//           action.payload.cellToChange,
-//           state.currentSide[1],
-//         ),
-//         currentSide: changeSide([action.payload.rowIndex,action.payload.cellIndex],state.currentSelected),
-//         currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
-
-        
-//       };
-//     case "clear":
-//       return {
-//         ...state,
-//         board: clearSelection(state.board),
-//         currentSide: ["fish", "selected"],
-//         currentSelected:"",
-//       }
-//     default:
-//       return state;
-//   }
-// }
 
 
 
@@ -97,27 +17,14 @@ function Board(){
   }, []);
 
 
-    // const initial = createBoard();
- 
-  // dispatch({      type: "updateState",
-  //     payload: { initial },})
 
   const board = useSelector((state) => state.game.board);
   
 
   const currentSelected = useSelector((state) => state.game.currentSelected);
-  // console.log(board);
-  // const [state, dispatch] = React.useReducer(reducer, {
-  //   board: createBoard(),
-  //   currentSide: ["fish", "selected"],
-  //   currentSelected: ""
-  // });
-  // console.log(state.board);
-  //onClick functions
+  const blockers = useSelector((state) => state.game.blockers);
+
   const cellOnClick = (rowIndex, cellIndex, side) => {
-    // console.log("selected", [rowIndex,cellIndex]);
-    // console.log("currentSelected",side);
-    // console.log();
 
     //need simplify
     if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
@@ -131,73 +38,108 @@ function Board(){
       // console.log(currentSelected);
     }
   } 
+  const doNothing = () => {
+    return ""
+  }
 
+  const checkBlocker = (cell,pathOpen) => {
+    // console.log(String(cell));
+    // console.log(String(blockers).includes("4,3"));
+    if (pathOpen) {
 
+      if (blockers.has(String(cell)) === true) {
+      return false
+    }
+    return true
+    }
+    return false
 
-  //callculate path to highlight
+  }
+
   const calculatePath = (rowIndex, cellIndex) => {
     let cellToChange = [];
-
-  
     let middle = Math.floor(height / 2);
-    let adjustmentValue = 0;
-    let rightAdjustmentValue = 0;
-    let leftAdjustmentValue = 0;
-    // let check =  Math.abs(middle - rowIndex)  ;
-    rowIndex > middle ? rightAdjustmentValue = rowIndex - middle : rightAdjustmentValue = 0;
-    for (let i = 0; i <= height; i++){
-      
-      // for top bot right side
-      // need simplyfy
-      if (rowIndex < middle && i > rowIndex && i <= middle) {
-        adjustmentValue += 1;
-        
-      } 
-      if (rowIndex > middle && i <= rowIndex && i > middle) {
-        rightAdjustmentValue -= 1;
-      } 
 
-      // for top bot left
-      if (i <= rowIndex) {
-        leftAdjustmentValue = Math.abs(rowIndex - i);
-      } else if (i > middle) {
-        leftAdjustmentValue += 1;
+    let topLeftAdjustmentValue = 0;
+    let topRightAdjustmentValue = 0;
+    let botRightAdjustmentValue = 0;
+    let botLeftAdjustmentValue = 0;
+
+    let topLeftCont = true;
+    let topRightCont = true;
+    let botLeftCont = true;
+    let botRightCont = true;
+    let leftCont = true;
+    let rightCont = true;
+    for (let i = 0; i <= 8; i++){
+      // can maybe add if all the cont conditions are true
+      // need refactoring, simplify
+      // top 
+      let rowUp = rowIndex - i;
+      if (rowUp >= 0) {
+
+        //top left
+        (rowUp < middle & rowUp !== rowIndex) ? topLeftAdjustmentValue += 1 : doNothing();
+        let topLeftIndex = cellIndex - topLeftAdjustmentValue;
+        topLeftCont = checkBlocker([rowUp, topLeftIndex],topLeftCont);
+        topLeftCont && topLeftIndex >= 0 ? cellToChange.push([rowUp, cellIndex - topLeftAdjustmentValue]) : doNothing();
+
+
+        //top right
+        (rowUp >= middle & rowUp !== rowIndex) ? topRightAdjustmentValue += 1 : doNothing();
+        let topRightIndex = cellIndex + topRightAdjustmentValue;
+        topRightCont = checkBlocker([rowUp, topRightIndex],topRightCont);
+        topRightCont && topRightIndex < rowsLengthList[rowUp] ? cellToChange.push([rowUp, topRightIndex]) : doNothing();
+
       }
 
-      // for left right
-       rowsLengthList[rowIndex] > i ?  cellToChange.push([rowIndex, i]) : console.log("") ;
-      // cellToChange.push([rowIndex,i]);
+      // bot 
+      let rowDown = rowIndex + i;
+      if (rowDown <= height) {
+        // bot right
 
-      // if (i === rowIndex) {
-      //   for (let j = 0; j < rowsLengthList[i]; j++){
-      //     if (j !== cellIndex) {
-      //       cellToChange.push([i, j]);
-      //     }
-      //   }
-      // }
-    
-    
-    let tempCellValue = 0;
-    let tempCellValue2 = 0;
+        (rowDown <= middle & rowDown !== rowIndex) ? botRightAdjustmentValue += 1 : doNothing();
+        let botRightIndex = cellIndex + botRightAdjustmentValue;
+        botRightCont = checkBlocker([rowDown, botRightIndex],botRightCont);
+        botRightCont && botRightIndex < rowsLengthList[rowDown] ? cellToChange.push([rowDown, botRightIndex]) : doNothing();
 
-    rightAdjustmentValue > 0 ? tempCellValue = cellIndex + adjustmentValue + rightAdjustmentValue : tempCellValue = cellIndex + adjustmentValue;
-    tempCellValue2 = cellIndex - leftAdjustmentValue;
 
-    rightAdjustmentValue > 0 ? tempCellValue2 = cellIndex - leftAdjustmentValue + rightAdjustmentValue : tempCellValue2 = cellIndex - leftAdjustmentValue;
+        // bot left
 
-    tempCellValue2 >= 0 ? cellToChange.push([i, tempCellValue2 ]) : console.log("");
-    tempCellValue < rowsLengthList[i] ? cellToChange.push([i, tempCellValue]) : console.log("");    
-    
+        (rowDown > middle & rowDown !== rowIndex) ? botLeftAdjustmentValue += 1 : doNothing();
+        let botLeftIndex = cellIndex - botLeftAdjustmentValue;
+        botLeftCont = checkBlocker([rowDown, botLeftIndex],botLeftCont);
+        botLeftCont && botLeftIndex >= 0 ? cellToChange.push([rowDown, botLeftIndex]) : doNothing();
+        
+
+
+
+      }
+      
+      //left
+      let leftIndex = cellIndex - i;
+      leftCont = checkBlocker([rowIndex, leftIndex],leftCont);
+      leftCont &&leftIndex >= 0 ? cellToChange.push([rowIndex, leftIndex]) : doNothing();
+      
+
+      
+
+      //right
+      let rightIndex = cellIndex + i;
+      rightCont = checkBlocker([rowIndex, rightIndex], rightCont);
+      rightCont && rightIndex < rowsLengthList[rowIndex] ? cellToChange.push([rowIndex, rightIndex]) : doNothing();
+      
+
     }
+    // console.log(cellToChange);
 
-
-    dispatch({
+        dispatch({
       type: "selectedAction",
       payload: { cellToChange,rowIndex,cellIndex },
     })
-  
-
+    
   }
+
   //clear path selection highlight
   const clearSelectionDispatch = () => {
 

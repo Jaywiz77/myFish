@@ -7,13 +7,6 @@
   cursor: pointer;
 }
 
-.hex.clean div {
-  background: #fff;
-  /* background-image: url("../public/fish2.png"); */
-  /* background-repeat: no-repeat; */
-  /* background-position: center; */
-}
-
 .hex.fish div {
   /* background: #dee; */
   background-image: url("../public/images/fish.png");
