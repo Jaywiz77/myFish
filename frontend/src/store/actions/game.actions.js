@@ -1,5 +1,5 @@
 
-  const boardItems = ["fish", "fish2", "fish3", "empty"];
+const boardItems = ["fish", "fish2", "fish3"];
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
 const height = rowsLengthList.length - 1;
 export const createBoard = () => {
@@ -14,23 +14,41 @@ export const createBoard = () => {
       payload:{board}
       }
 }
+const changeHighlight = (selectedCell, currentSelected) => {
+  if (selectedCell[0] === currentSelected[0] && currentSelected[1] === selectedCell[1]) {
+      return ["", "white"]
+  } else {
+      return  ["","selected"]
+  }
+}
+
+
+export const addPlayerPiece = (board,player,rowIndex,cellIndex) => {
+
+  const newBoard = board;
+  newBoard[rowIndex][cellIndex][0] = player;
+  
+  return {
+    type: "SET_PIECE",
+    payload:{newBoard,rowIndex,cellIndex}
+  }
+  
+}
 
 
 export const selectedAction = (board, side, rowIndex, cellIndex,blockers, currentSelected) => { //side = highlighted or not
   
   //calculate the path
   const cellToChange = calculatePath(rowIndex,cellIndex,blockers)
-
+  const highlight = changeHighlight([rowIndex, cellIndex], currentSelected);
   const newBoard = clearSelection(board);
   cellToChange.map(arr => {
     //arr sample = [rowIndex,cellIndex]
     newBoard[arr[0]][arr[1]][1] = side;
   })
-
-  const newSide = changeSide([rowIndex, cellIndex], currentSelected);
   return {
-    type: "selectedAction",
-    payload: { newBoard, newSide, rowIndex, cellIndex }
+    type: "SELECTED_ACTION",
+    payload: { newBoard, highlight, rowIndex, cellIndex }
   };
 }
 
@@ -57,26 +75,17 @@ export function clearSelectionDispatch(board) {
 }
 
 
-export const changeSide = (side, currentSelected) => {
-  // console.log(currentSelected);
-if (side[0] === currentSelected[0] && currentSelected[1] === side[1]) {
-    return ["", "white"]
-} else {
-    return  ["","selected"]
-}
-}
 
 
 
 const checkBlocker = (cell,pathOpen,blockers) => {
-  // console.log(String(cell));
-  // console.log(String(blockers).includes("4,3"));
+
   if (pathOpen) {
 
     if (blockers.has(String(cell)) === true) {
     return false
   }
-  return true
+    return true
   }
   return false
 

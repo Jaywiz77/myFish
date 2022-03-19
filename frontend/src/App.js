@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import Board from "./components/board"
+import GameRoom from "./components/gameRoom"
 import './App.css';
 import { Provider } from "react-redux";
 import store from "./store";
@@ -10,7 +10,7 @@ function App() {
       <div className='bar'>
 
       </div>
-      <Board/>
+      <GameRoom/>
       </div>
       </Provider>
   );
