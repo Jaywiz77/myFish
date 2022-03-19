@@ -10,7 +10,7 @@ function Board(){
   const dispatch = useDispatch();
   // dispatch(Actions.createBoard());
   useEffect(() => {
-     dispatch(Actions.createBoard());
+     Actions.createBoard();
   }, []);
 
 
@@ -27,11 +27,11 @@ function Board(){
     //need simplify
     if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
         // clearSelectionDispatch();
-      dispatch(Actions.clearSelectionDispatch(board));
+      Actions.clearSelectionDispatch(board);
       // console.log(currentSelected);
     
     } else {
-      dispatch(Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected),);  
+      Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected);  
 
       // console.log(currentSelected);
     }
