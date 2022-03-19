@@ -18,7 +18,8 @@ let initialState = {
     currentSide: ["fish", "selected"],
     currentSelected: ["", ""],
     outOfPlay: [],
-    blockers: new Set(["4,3","4,4"]),
+    blockers: new Set(["4,3", "4,4"]),
+    turn:0,
     player1: [],
     player2: []
     
@@ -32,14 +33,11 @@ function game(state=initialState, action) {
         board: action.payload.board,
       }
     case "selectedAction":
+      console.log('sd')
       return {
         ...state,
-        board: Actions.selectedAction(
-          state.board,
-          action.payload.cellToChange,
-          state.currentSide[1],
-        ),
-        currentSide: Actions.changeSide([action.payload.rowIndex,action.payload.cellIndex],state.currentSelected),
+        board: action.payload.newBoard,
+        currentSide: action.payload.newSide,
         currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
 
         
