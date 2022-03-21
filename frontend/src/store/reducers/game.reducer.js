@@ -16,10 +16,10 @@ const initialBoard = [
 
 let initialState = {
     board: initialBoard,
-    currentSide: ["fish", "selected"],
+    currentSide: "selected",
     currentSelected: ["", ""],
     outOfPlay: [],
-    blockers: new Set(["4,3", "4,4"]),
+    blockers: new Set([]),
   turn: 0,
     gamePhase:"setPlayerPieces",
     player1: [],
@@ -47,11 +47,16 @@ function game(state=initialState, action) {
         currentSide: action.payload.highlight,  //css
         currentSelected:[action.payload.rowIndex,action.payload.cellIndex] //cell coordinate
       };
+    case "SET_BLOCKER":
+      return {
+        ...state,
+        blockers: action.payload.blockers
+      }
     case "CLEAR":
       return {
         ...state,
         board: action.payload.board,
-        currentSide: ["fish", "selected"],
+        currentSide:  "selected",
         currentSelected: ["",""],
       };
     case "CHANGE_PHASE":

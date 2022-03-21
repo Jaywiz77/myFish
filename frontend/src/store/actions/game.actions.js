@@ -3,18 +3,16 @@ import * as socketSender from "../../socket/socket.sender";
 
 export const SETUP_ID = "SETUP SOCKET ID";
 
-const boardItems = ["fish", "fish2", "fish3"];
+const boardItems = [["fish","white",1],["fish2","white",2], ["fish3","white",3]];
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
 const height = rowsLengthList.length - 1;
 export const createBoard = () => {
   const board = rowsLengthList.map((length) =>
     new Array(length)
       .fill()
-      .map(() => [
-        boardItems[Math.floor(Math.random() * boardItems.length)],
-        "white",
-      ])
+      .map(() => boardItems[Math.floor(Math.random() * boardItems.length)])
   );
+
   socketSender.broadcastToAll({
     type: "SET_BOARD",
     payload: { board },
@@ -33,11 +31,21 @@ export const addPlayerPiece = (board,player,rowIndex,cellIndex) => {
   
 }
 
+export const addBlockers = (blockers,rowIndex, cellIndex) => {
+  
+  blockers.add(`${rowIndex},${cellIndex}`);
+  return {
+    type: "SET_BLOCKER",
+    payload:{blockers}
+  }
+
+}
+
 const changeHighlight = (selectedCell, currentSelected) => {
   if (selectedCell[0] === currentSelected[0] && currentSelected[1] === selectedCell[1]) {
-      return ["", "white"]
+      return "white"
   } else {
-      return  ["","selected"]
+      return  "selected"
   }
 }
 export const selectedAction = (
@@ -48,7 +56,6 @@ export const selectedAction = (
   blockers,
   currentSelected
 ) => {
-  console.log('-');
   //calculate the path
   const cellToChange = calculatePath(rowIndex,cellIndex,blockers)
   const highlight = changeHighlight([rowIndex, cellIndex], currentSelected);
@@ -124,7 +131,7 @@ const calculatePath = (rowIndex, cellIndex, blockers) => {
   let botRightCont = true;
   let leftCont = true;
   let rightCont = true;
-  for (let i = 0; i <= 8; i++) {
+  for (let i = 1; i <= height; i++) {
     // can maybe add if all the cont conditions are true
     // need refactoring, simplify
     // top
@@ -202,6 +209,14 @@ const calculatePath = (rowIndex, cellIndex, blockers) => {
     rightCont && rightIndex < rowsLengthList[rowIndex]
       ? cellToChange.push([rowIndex, rightIndex])
       : doNothing();
+    // console.log("---------------------------");
+    // console.log("tl",topLeftCont);
+    // console.log("tr",topRightCont);
+    // console.log("bl",botLeftCont);
+    // console.log("br",botRightCont);
+    // console.log("left",leftCont);
+    // console.log("right",rightCont);
+
   }
 
   return cellToChange;

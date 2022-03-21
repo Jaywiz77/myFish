@@ -21,22 +21,25 @@ function Board(){
   const gamePhase = useSelector((state) => state.game.gamePhase);
 
   const cellOnClick = (rowIndex, cellIndex, side) => {
-
+    console.log(board);
     if (gamePhase === "setPlayerPieces") {
       dispatch(Actions.addPlayerPiece(board, "player1", rowIndex, cellIndex));
+      dispatch(Actions.addBlockers(blockers, rowIndex, cellIndex));
+      //asd
+      // console.log("set");
     }
 
     //need simplify
     else if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
         // clearSelectionDispatch();
       Actions.clearSelectionDispatch(board);
-      // console.log(currentSelected);
+      // console.log("elseuf");
     
     } else {
 
-      Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected);  
+      Actions.selectedAction(board,currentSide,rowIndex, cellIndex,blockers,currentSelected);  
+      // console.log("else");
 
-      // console.log(currentSelected);
     }
   } 
 
