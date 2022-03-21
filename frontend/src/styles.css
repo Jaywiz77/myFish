@@ -67,10 +67,18 @@
 }
 
 .hex.white div {
-  background-color: aliceblue;
+  background-color: azure;
 }
 .hex.selected div {
   background-color: lightsteelblue;
+}
+
+.hex.nothing div {
+  background-color: #4682b4;
+  background-image: url("../public/images/sea.png");
+  background-repeat: no-repeat;
+  background-size: 79%;
+  background-position: center;
 }
 
 .hex:hover div {
@@ -82,11 +90,11 @@
 }
 
 .bg {
-  background-color: darkcyan;
+  background-color: #4682b4;
   height: 100vh;
 }
 
 .bar {
-  background-color: aquamarine;
+  /* background-color: 0818a8; */
   height: 2vh;
 }

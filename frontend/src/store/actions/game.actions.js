@@ -19,15 +19,34 @@ export const createBoard = () => {
   });
 };
   
-export const addPlayerPiece = (board,player,rowIndex,cellIndex) => {
+export const addPlayerPiece = (board,player,rowIndex,cellIndex,blockers) => {
 
   const newBoard = board;
   newBoard[rowIndex][cellIndex][0] = player;
-  
-  return {
+  blockers.push(`${rowIndex},${cellIndex}`);
+
+  socketSender.broadcastToAll({
     type: "SET_PIECE",
-    payload:{newBoard,rowIndex,cellIndex}
-  }
+    payload: { newBoard, rowIndex, cellIndex,blockers }
+  });
+  
+}
+
+export const movePlayerPiece = (board,player,currentSelected,rowIndex,cellIndex,blockers) => {
+
+  // let newBoard = board;
+  board[rowIndex][cellIndex][0] = player;
+  console.log("movee");
+  board[currentSelected[0]][currentSelected[1]][0] = "nothing"; 
+  let newBoard = clearSelection(board);
+  let nextPhase = "selectPiecePhase";
+
+  // add to blockers
+  blockers.push(`${rowIndex},${cellIndex}`);
+  socketSender.broadcastToAll({
+    type: "MOVE_PIECE",
+    payload: { newBoard, rowIndex, cellIndex, nextPhase,blockers }
+  });
   
 }
 
@@ -61,14 +80,14 @@ export const selectedAction = (
   const highlight = changeHighlight([rowIndex, cellIndex], currentSelected);
   const newBoard = clearSelection(board);
   cellToChange.map((arr) => {
-    //arr sample = [rowIndex,cellIndex]
+    //arr sample = [rowIndex,cellIndex]s
     newBoard[arr[0]][arr[1]][1] = side;
 
   });
-
+  let nextPhase = "movePiecePhase";
   socketSender.broadcastToAll({
     type: "SELECTED_ACTION",
-    payload: { newBoard, highlight, rowIndex, cellIndex },
+    payload: { newBoard, highlight, rowIndex, cellIndex, nextPhase },
   });
 };
 
@@ -101,11 +120,10 @@ export const changeSide = (side, currentSelected) => {
 };
 
 const checkBlocker = (cell, pathOpen, blockers) => {
-  // console.log(String(cell));
-  // console.log(String(blockers).includes("4,3"));
+
 
   if (pathOpen) {
-    if (blockers.has(String(cell)) === true) {
+    if (new Set(blockers).has(String(cell)) === true) {
       return false;
     }
     return true;

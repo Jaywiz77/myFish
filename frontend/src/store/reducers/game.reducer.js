@@ -2,15 +2,15 @@ import { act } from 'react-dom/test-utils';
 import * as Actions from '../actions';
 
 const initialBoard = [
-  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["player1", "white"], ["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["player2", "white"], ["white", "white"],["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["player3", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["player4", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"],["white", "white"],["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"],["white", "white"],["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]],
-  [["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"], ["white", "white"]]
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player1", "white",0], ["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player2", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player3", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player4", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]]
   
 ]
 
@@ -19,7 +19,7 @@ let initialState = {
     currentSide: "selected",
     currentSelected: ["", ""],
     outOfPlay: [],
-    blockers: new Set([]),
+    blockers: [],
   turn: 0,
     gamePhase:"setPlayerPieces",
     player1: [],
@@ -34,20 +34,31 @@ function game(state=initialState, action) {
         ...state,
         board: action.payload.board,
       }
-        case "SET_PIECE":
+    case "SET_PIECE":
       return {
         ...state,
         board: action.payload.newBoard,
-        currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
+        currentSelected: [action.payload.rowIndex, action.payload.cellIndex],
+        blockers:action.payload.blockers
+      }
+    case "MOVE_PIECE":
+      return {
+        ...state,
+        board: action.payload.newBoard,
+        currentSelected: ["", ""],
+        gamePhase: action.payload.nextPhase,
+        blockers:action.payload.blockers
       }
     case "SELECTED_ACTION":
       return {
         ...state,
         board: action.payload.newBoard,
         currentSide: action.payload.highlight,  //css
-        currentSelected:[action.payload.rowIndex,action.payload.cellIndex] //cell coordinate
+        currentSelected: [action.payload.rowIndex, action.payload.cellIndex], //cell coordinate
+        gamePhase: action.payload.nextPhase
       };
     case "SET_BLOCKER":
+      console.log('reducer',action.payload.blockers);
       return {
         ...state,
         blockers: action.payload.blockers

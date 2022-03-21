@@ -8,7 +8,7 @@ const GameRoom = ()=> {
     const blockers = useSelector((state) => state.game.blockers);
     const iterable = [...blockers];
     const changePhase = (gamePhase) => { 
-        let newPhase = gamePhase === "setPlayerPieces" ?  "playPhase" : "setPlayerPieces" ;
+        let newPhase = gamePhase === "setPlayerPieces" ?  "selectPiecePhase" : "setPlayerPieces" ;
         dispatch({
             type: "CHANGE_PHASE",
             payload: { newPhase }
@@ -19,7 +19,7 @@ const GameRoom = ()=> {
             <div style={{ minWidth: "30%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h4>Current Phase: </h4>
                 <label>{gamePhase}</label>
-                <label>Blocks at {iterable.map(x => "[" + x + "] ") }</label>
+                {/* <label>Blocks at {iterable.map(x => "[" + x + "] ") }</label> */}
                 <button onClick={()=>{changePhase(gamePhase)}}>change Phase</button>
             </div>
         <Board style={{minWidth:"70%"}} />
