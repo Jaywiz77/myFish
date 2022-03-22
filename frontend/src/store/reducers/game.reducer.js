@@ -20,8 +20,10 @@ let initialState = {
     currentSelected: ["", ""],
     outOfPlay: [],
     blockers: [],
-  turn: 0,
-    gamePhase:"setPlayerPieces",
+    turn: 0,
+    gamePhase: "setPlayerPieces",
+    playerInfo:[["player1",[],0],["player2",[],0],["player3",[],0],["player4",[],0]], //[player,[pieces],points]
+    highlightedPath:[],
     player1: [],
     player2: []
     
@@ -39,7 +41,9 @@ function game(state=initialState, action) {
         ...state,
         board: action.payload.newBoard,
         currentSelected: [action.payload.rowIndex, action.payload.cellIndex],
-        blockers:action.payload.blockers
+        blockers: action.payload.blockers,
+        playerPieces: action.payload.playerPieces,
+        turn: state.turn += 1
       }
     case "MOVE_PIECE":
       return {
@@ -47,7 +51,10 @@ function game(state=initialState, action) {
         board: action.payload.newBoard,
         currentSelected: ["", ""],
         gamePhase: action.payload.nextPhase,
-        blockers:action.payload.blockers
+        blockers: action.payload.blockers,
+        highlightedPath: [],
+        playerPieces: action.payload.newPlayerPieces,
+        turn:state.turn+=1
       }
     case "SELECTED_ACTION":
       return {
@@ -55,10 +62,10 @@ function game(state=initialState, action) {
         board: action.payload.newBoard,
         currentSide: action.payload.highlight,  //css
         currentSelected: [action.payload.rowIndex, action.payload.cellIndex], //cell coordinate
-        gamePhase: action.payload.nextPhase
+        gamePhase: action.payload.nextPhase,
+        highlightedPath:action.payload.cellToChange
       };
     case "SET_BLOCKER":
-      console.log('reducer',action.payload.blockers);
       return {
         ...state,
         blockers: action.payload.blockers
@@ -68,7 +75,8 @@ function game(state=initialState, action) {
         ...state,
         board: action.payload.board,
         currentSide:  "selected",
-        currentSelected: ["",""],
+        currentSelected: ["", ""],
+        gamePhase: action.payload.nextPhase
       };
     case "CHANGE_PHASE":
       return {
