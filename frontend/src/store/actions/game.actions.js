@@ -19,33 +19,37 @@ export const createBoard = () => {
   });
 };
   
-export const addPlayerPiece = (board,player,rowIndex,cellIndex,blockers) => {
+export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
 
   const newBoard = board;
-  newBoard[rowIndex][cellIndex][0] = player;
+  newBoard[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  playerInfo[playerTurn][1].push(`${rowIndex},${cellIndex}`);
+  playerInfo[playerTurn][2] += points;
   blockers.push(`${rowIndex},${cellIndex}`);
 
   socketSender.broadcastToAll({
     type: "SET_PIECE",
-    payload: { newBoard, rowIndex, cellIndex,blockers }
+    payload: { newBoard, rowIndex, cellIndex,blockers,playerInfo }
   });
   
 }
 
-export const movePlayerPiece = (board,player,currentSelected,rowIndex,cellIndex,blockers) => {
+export const movePlayerPiece = (board,currentSelected,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
 
   // let newBoard = board;
-  board[rowIndex][cellIndex][0] = player;
-  console.log("movee");
+  board[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  // console.log("movee");
   board[currentSelected[0]][currentSelected[1]][0] = "nothing"; 
   let newBoard = clearSelection(board);
   let nextPhase = "selectPiecePhase";
-
+  playerInfo[playerTurn][1] = playerInfo[playerTurn][1].filter(function (e) { return e !== `${currentSelected[0]},${currentSelected[1]}` })
+  playerInfo[playerTurn][1].push(`${rowIndex},${cellIndex}`)
+  playerInfo[playerTurn][2] = points;
   // add to blockers
   blockers.push(`${rowIndex},${cellIndex}`);
   socketSender.broadcastToAll({
     type: "MOVE_PIECE",
-    payload: { newBoard, rowIndex, cellIndex, nextPhase,blockers }
+    payload: { newBoard, rowIndex, cellIndex, nextPhase,blockers,playerInfo }
   });
   
 }
@@ -87,7 +91,7 @@ export const selectedAction = (
   let nextPhase = "movePiecePhase";
   socketSender.broadcastToAll({
     type: "SELECTED_ACTION",
-    payload: { newBoard, highlight, rowIndex, cellIndex, nextPhase },
+    payload: { newBoard, highlight, rowIndex, cellIndex, nextPhase ,cellToChange},
   });
 };
 
@@ -104,9 +108,10 @@ export function clearSelection(board) {
 
 export function clearSelectionDispatch(board) {
   board = clearSelection(board);
+  let nextPhase = "selectPiecePhase";
   socketSender.broadcastToAll({
     type: "CLEAR",
-    payload: { board },
+    payload: { board ,nextPhase},
   });
 }
 

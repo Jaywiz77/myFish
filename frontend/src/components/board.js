@@ -4,10 +4,17 @@ import { Hex } from "./hex"
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
 const r = 100;
+const isArrayInArray = (arr, item) => {
+  var item_as_string = JSON.stringify(item);
 
+  var contains = arr.some(function(ele){
+    return JSON.stringify(ele) === item_as_string;
+  });
+  return contains;
+}
 
 function Board(){
-  const dispatch = useDispatch();
+
   // dispatch(Actions.createBoard());
   useEffect(() => {
      Actions.createBoard();
@@ -19,42 +26,46 @@ function Board(){
   const blockers = useSelector((state) => state.game.blockers);
   const currentSide = useSelector((state) => state.game.currentSide);
   const gamePhase = useSelector((state) => state.game.gamePhase);
+  const highlighted = useSelector((state) => state.game.highlightedPath);
+  const playerInfo = useSelector((state) => state.game.playerInfo);
+  const turnNumber = useSelector((state) => state.game.turn);
+  // const id = useSelector((state) => state.game.SETUP_ID);
 
-  const cellOnClick = (rowIndex, cellIndex, cell) => {
-    console.log("current", gamePhase);
-    
-    
+  const cellOnClick = (rowIndex, cellIndex, points) => {
+
+    const playerTurn = turnNumber % playerInfo.length;
+    // console.log(playerInfo);
+    if (gamePhase === "setPlayerPieces" && isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
+
+      Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
+
+    } else if (gamePhase === "selectPiecePhase") { //select pieces to move
+      if (isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {
       
-    
-    if (gamePhase === "setPlayerPieces") {
-      Actions.addPlayerPiece(board, "player1", rowIndex, cellIndex,blockers);
-      // dispatch(Actions.addBlockers(blockers, rowIndex, cellIndex));
-      //asd
-      console.log("setplayer");
-    } else if (gamePhase === "selectPiecePhase") {
-      console.log("setpiece")
-      if (new Set(blockers).has(`${rowIndex},${cellIndex}`)) {
-      
-        //need simplify
+
         if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
-          // clearSelectionDispatch();
           Actions.clearSelectionDispatch(board);
-          // console.log("elseuf");
         
         } else {
 
           Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
-          // console.log("else");
 
         }
       }
       
-    } else if (gamePhase === "movePiecePhase") {
-        console.log("movee")
-        if (currentSelected[0] !== "") {
-          console.log(currentSelected);
-          Actions.movePlayerPiece(board, "player1",currentSelected, rowIndex, cellIndex,blockers);
-        } 
+    } else if (gamePhase === "movePiecePhase") { //move selected pieces
+      console.log('==========')
+      if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
+          // clearSelectionDispatch();
+          Actions.clearSelectionDispatch(board);
+        
+        } else if (currentSelected[0] !== "" && isArrayInArray(highlighted,[rowIndex,cellIndex])) {
+          // console.log(currentSelected);
+          Actions.movePlayerPiece(board,currentSelected, rowIndex, cellIndex,blockers,playerInfo,playerTurn,points);
+      } else if (isArrayInArray(playerInfo[playerTurn][1], `${rowIndex},${cellIndex}`)) {
+        console.log('----')
+          Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+        }
 
       
       }
@@ -86,7 +97,7 @@ function Board(){
                   test="23"
                   key={`${rowIndex},${cellIndex}`}
                   style={{ height: `${r}px`, width: `${r}px` }}
-                  onClick={ ()=> cellOnClick(rowIndex,cellIndex,cell)}
+                  onClick={ ()=> cellOnClick(rowIndex,cellIndex,cell[2])}
                 />
               ))}
             </div>
