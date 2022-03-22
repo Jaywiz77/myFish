@@ -26,7 +26,7 @@ io.on("connection", socket => {
     // When client disconnects
     socket.on("disconnecting", () => {
         console.log(`Client id ${socket.id} disconnecting`)
-        io.emit(DISCONNECT_EVENT, socket.id);
+        // io.emit(DISCONNECT_EVENT, socket.id);
     });
 });
 
