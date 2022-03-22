@@ -1,25 +1,27 @@
+import { act } from 'react-dom/test-utils';
 import * as Actions from '../actions';
 
 const initialBoard = [
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"],["0", "white"],["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]],
-  [["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"], ["0", "white"]]
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player1", "white",0], ["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player2", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player3", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player4", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0],["white", "white",0],["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]],
+  [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]]
   
 ]
 
 let initialState = {
     board: initialBoard,
-    currentSide: ["fish", "selected"],
+    currentSide: "selected",
     currentSelected: ["", ""],
     outOfPlay: [],
-    blockers: new Set(["4,3", "4,4"]),
-    turn:0,
+    blockers: [],
+  turn: 0,
+    gamePhase:"setPlayerPieces",
     player1: [],
     player2: []
     
@@ -32,23 +34,47 @@ function game(state=initialState, action) {
         ...state,
         board: action.payload.board,
       }
-    case "selectedAction":
-      console.log('sd')
+    case "SET_PIECE":
       return {
         ...state,
         board: action.payload.newBoard,
-        currentSide: action.payload.newSide,
-        currentSelected:[action.payload.rowIndex,action.payload.cellIndex]
-
-        
+        currentSelected: [action.payload.rowIndex, action.payload.cellIndex],
+        blockers:action.payload.blockers
+      }
+    case "MOVE_PIECE":
+      return {
+        ...state,
+        board: action.payload.newBoard,
+        currentSelected: ["", ""],
+        gamePhase: action.payload.nextPhase,
+        blockers:action.payload.blockers
+      }
+    case "SELECTED_ACTION":
+      return {
+        ...state,
+        board: action.payload.newBoard,
+        currentSide: action.payload.highlight,  //css
+        currentSelected: [action.payload.rowIndex, action.payload.cellIndex], //cell coordinate
+        gamePhase: action.payload.nextPhase
       };
+    case "SET_BLOCKER":
+      console.log('reducer',action.payload.blockers);
+      return {
+        ...state,
+        blockers: action.payload.blockers
+      }
     case "CLEAR":
       return {
         ...state,
         board: action.payload.board,
-        currentSide: ["fish", "selected"],
+        currentSide:  "selected",
         currentSelected: ["",""],
       };
+    case "CHANGE_PHASE":
+      return {
+        ...state,
+        gamePhase:action.payload.newPhase
+      }
 
     default:
       return state;

@@ -12,48 +12,58 @@ function Board(){
   useEffect(() => {
      Actions.createBoard();
   }, []);
-
-
-
   const board = useSelector((state) => state.game.board);
   
 
   const currentSelected = useSelector((state) => state.game.currentSelected);
   const blockers = useSelector((state) => state.game.blockers);
   const currentSide = useSelector((state) => state.game.currentSide);
+  const gamePhase = useSelector((state) => state.game.gamePhase);
 
-  const cellOnClick = (rowIndex, cellIndex, side) => {
-
-    //need simplify
-    if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
-        // clearSelectionDispatch();
-      Actions.clearSelectionDispatch(board);
-      // console.log(currentSelected);
+  const cellOnClick = (rowIndex, cellIndex, cell) => {
+    console.log("current", gamePhase);
     
-    } else {
-      Actions.selectedAction(board,currentSide[1],rowIndex, cellIndex,blockers,currentSelected);  
+    
+      
+    
+    if (gamePhase === "setPlayerPieces") {
+      Actions.addPlayerPiece(board, "player1", rowIndex, cellIndex,blockers);
+      // dispatch(Actions.addBlockers(blockers, rowIndex, cellIndex));
+      //asd
+      console.log("setplayer");
+    } else if (gamePhase === "selectPiecePhase") {
+      console.log("setpiece")
+      if (new Set(blockers).has(`${rowIndex},${cellIndex}`)) {
+      
+        //need simplify
+        if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
+          // clearSelectionDispatch();
+          Actions.clearSelectionDispatch(board);
+          // console.log("elseuf");
+        
+        } else {
 
-      // console.log(currentSelected);
-    }
+          Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+          // console.log("else");
+
+        }
+      }
+      
+    } else if (gamePhase === "movePiecePhase") {
+        console.log("movee")
+        if (currentSelected[0] !== "") {
+          console.log(currentSelected);
+          Actions.movePlayerPiece(board, "player1",currentSelected, rowIndex, cellIndex,blockers);
+        } 
+
+      
+      }
+    
+      
+    
+    
   } 
 
-
-
-
-
-  //clear path selection highlight
-  const clearSelectionDispatch = () => {
-
-    dispatch({
-      type: "clear"
-    })
-  }
-  const addImage = () => {
-    
-  }
-
-
-  // calculatePath(4, 5);
 
   return (
     <div className="App" style={{ width: "1000px", marginTop: "35px" }}>
@@ -68,14 +78,15 @@ function Board(){
                 justifyContent: "center"
               }}
             >
-              {row.map((side, cellIndex) => (
+              {row.map((cell, cellIndex) => (
                 <Hex
                   id={`${rowIndex},${cellIndex}`}
-                  side={side[0]}
-                  color={side[1]}
+                  side={cell[0]}
+                  color={cell[1]}
+                  test="23"
                   key={`${rowIndex},${cellIndex}`}
                   style={{ height: `${r}px`, width: `${r}px` }}
-                  onClick={ ()=> cellOnClick(rowIndex,cellIndex,side)}
+                  onClick={ ()=> cellOnClick(rowIndex,cellIndex,cell)}
                 />
               ))}
             </div>

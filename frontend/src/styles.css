@@ -5,6 +5,7 @@
 
 .hex {
   cursor: pointer;
+  transform: rotate(60deg);
 }
 
 .hex.fish div {
@@ -30,15 +31,54 @@
   background-position: center;
 }
 
-.hex.player div {
-  background-color: #faf !important;
+.hex.player1 div {
+  /* background-color: #faf !important; */
+  background-image: url("../public/images/penguin1.png");
+  background-repeat: no-repeat;
+  background-size: 75%;
+  background-position: center;
+}
+
+.hex.player2 div {
+  /* background-color: #faf !important; */
+  background-image: url("../public/images/penguin2.png");
+  background-repeat: no-repeat;
+  background-size: 75%;
+
+  background-position: center;
+}
+
+.hex.player3 div {
+  /* background-color: #faf !important; */
+  background-image: url("../public/images/penguin3.png");
+  background-repeat: no-repeat;
+  background-size: 75%;
+
+  background-position: center;
+}
+
+.hex.player4 div {
+  /* background-color: #faf !important; */
+  background-image: url("../public/images/penguin4.png");
+  background-repeat: no-repeat;
+  background-size: 75%;
+
+  background-position: center;
 }
 
 .hex.white div {
-  background-color: aliceblue;
+  background-color: azure;
 }
 .hex.selected div {
   background-color: lightsteelblue;
+}
+
+.hex.nothing div {
+  background-color: #4682b4;
+  background-image: url("../public/images/sea.png");
+  background-repeat: no-repeat;
+  background-size: 79%;
+  background-position: center;
 }
 
 .hex:hover div {
@@ -50,11 +90,11 @@
 }
 
 .bg {
-  background-color: darkcyan;
+  background-color: #4682b4;
   height: 100vh;
 }
 
 .bar {
-  background-color: aquamarine;
+  /* background-color: 0818a8; */
   height: 2vh;
 }

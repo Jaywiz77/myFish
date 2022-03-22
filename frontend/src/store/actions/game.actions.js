@@ -1,25 +1,72 @@
 import * as socketSender from "../../socket/socket.sender";
 
+
 export const SETUP_ID = "SETUP SOCKET ID";
 
-const boardItems = ["fish", "fish2", "fish3", "empty"];
+const boardItems = [["fish","white",1],["fish2","white",2], ["fish3","white",3]];
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
 const height = rowsLengthList.length - 1;
 export const createBoard = () => {
   const board = rowsLengthList.map((length) =>
     new Array(length)
       .fill()
-      .map(() => [
-        boardItems[Math.floor(Math.random() * boardItems.length)],
-        "white",
-      ])
+      .map(() => boardItems[Math.floor(Math.random() * boardItems.length)])
   );
+
   socketSender.broadcastToAll({
     type: "SET_BOARD",
     payload: { board },
   });
 };
+  
+export const addPlayerPiece = (board,player,rowIndex,cellIndex,blockers) => {
 
+  const newBoard = board;
+  newBoard[rowIndex][cellIndex][0] = player;
+  blockers.push(`${rowIndex},${cellIndex}`);
+
+  socketSender.broadcastToAll({
+    type: "SET_PIECE",
+    payload: { newBoard, rowIndex, cellIndex,blockers }
+  });
+  
+}
+
+export const movePlayerPiece = (board,player,currentSelected,rowIndex,cellIndex,blockers) => {
+
+  // let newBoard = board;
+  board[rowIndex][cellIndex][0] = player;
+  console.log("movee");
+  board[currentSelected[0]][currentSelected[1]][0] = "nothing"; 
+  let newBoard = clearSelection(board);
+  let nextPhase = "selectPiecePhase";
+
+  // add to blockers
+  blockers.push(`${rowIndex},${cellIndex}`);
+  socketSender.broadcastToAll({
+    type: "MOVE_PIECE",
+    payload: { newBoard, rowIndex, cellIndex, nextPhase,blockers }
+  });
+  
+}
+
+export const addBlockers = (blockers,rowIndex, cellIndex) => {
+  
+  blockers.add(`${rowIndex},${cellIndex}`);
+  return {
+    type: "SET_BLOCKER",
+    payload:{blockers}
+  }
+
+}
+
+const changeHighlight = (selectedCell, currentSelected) => {
+  if (selectedCell[0] === currentSelected[0] && currentSelected[1] === selectedCell[1]) {
+      return "white"
+  } else {
+      return  "selected"
+  }
+}
 export const selectedAction = (
   board,
   side, //side = highlighted or not
@@ -29,20 +76,21 @@ export const selectedAction = (
   currentSelected
 ) => {
   //calculate the path
-  const cellToChange = calculatePath(rowIndex, cellIndex, blockers);
-
+  const cellToChange = calculatePath(rowIndex,cellIndex,blockers)
+  const highlight = changeHighlight([rowIndex, cellIndex], currentSelected);
   const newBoard = clearSelection(board);
   cellToChange.map((arr) => {
-    //arr sample = [rowIndex,cellIndex]
+    //arr sample = [rowIndex,cellIndex]s
     newBoard[arr[0]][arr[1]][1] = side;
-  });
 
-  const newSide = changeSide([rowIndex, cellIndex], currentSelected);
+  });
+  let nextPhase = "movePiecePhase";
   socketSender.broadcastToAll({
-    type: "selectedAction",
-    payload: { newBoard, newSide, rowIndex, cellIndex },
+    type: "SELECTED_ACTION",
+    payload: { newBoard, highlight, rowIndex, cellIndex, nextPhase },
   });
 };
+
 
 export function clearSelection(board) {
   board.map((arrs) => {
@@ -72,13 +120,14 @@ export const changeSide = (side, currentSelected) => {
 };
 
 const checkBlocker = (cell, pathOpen, blockers) => {
-  // console.log(String(cell));
-  // console.log(String(blockers).includes("4,3"));
+
+
   if (pathOpen) {
-    if (blockers.has(String(cell)) === true) {
+    if (new Set(blockers).has(String(cell)) === true) {
       return false;
     }
     return true;
+
   }
   return false;
 };
@@ -100,7 +149,7 @@ const calculatePath = (rowIndex, cellIndex, blockers) => {
   let botRightCont = true;
   let leftCont = true;
   let rightCont = true;
-  for (let i = 0; i <= 8; i++) {
+  for (let i = 1; i <= height; i++) {
     // can maybe add if all the cont conditions are true
     // need refactoring, simplify
     // top
@@ -178,6 +227,14 @@ const calculatePath = (rowIndex, cellIndex, blockers) => {
     rightCont && rightIndex < rowsLengthList[rowIndex]
       ? cellToChange.push([rowIndex, rightIndex])
       : doNothing();
+    // console.log("---------------------------");
+    // console.log("tl",topLeftCont);
+    // console.log("tr",topRightCont);
+    // console.log("bl",botLeftCont);
+    // console.log("br",botRightCont);
+    // console.log("left",leftCont);
+    // console.log("right",rightCont);
+
   }
 
   return cellToChange;
