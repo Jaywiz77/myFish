@@ -98,3 +98,35 @@
   /* background-color: 0818a8; */
   height: 2vh;
 }
+
+.p1 {
+  background-image: url("../public/images/penguin1.png");
+  transform: rotate(270deg);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: center;
+}
+
+.p2 {
+  background-image: url("../public/images/penguin2.png");
+  transform: rotate(270deg);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: center;
+}
+
+.p3 {
+  background-image: url("../public/images/penguin3.png");
+  transform: rotate(270deg);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: center;
+}
+
+.p4 {
+  background-image: url("../public/images/penguin4.png");
+  transform: rotate(270deg);
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: center;
+}
