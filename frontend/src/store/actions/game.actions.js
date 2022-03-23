@@ -44,7 +44,7 @@ export const movePlayerPiece = (board,currentSelected,rowIndex,cellIndex,blocker
   let nextPhase = "selectPiecePhase";
   playerInfo[playerTurn][1] = playerInfo[playerTurn][1].filter(function (e) { return e !== `${currentSelected[0]},${currentSelected[1]}` })
   playerInfo[playerTurn][1].push(`${rowIndex},${cellIndex}`)
-  playerInfo[playerTurn][2] = points;
+  playerInfo[playerTurn][2] += points;
   // add to blockers
   blockers.push(`${rowIndex},${cellIndex}`);
   socketSender.broadcastToAll({
@@ -128,7 +128,7 @@ const checkBlocker = (cell, pathOpen, blockers) => {
 
 
   if (pathOpen) {
-    if (new Set(blockers).has(String(cell)) === true) {
+    if (isArrayInArray(blockers,`${cell[0]},${cell[1]}`) === true) {
       return false;
     }
     return true;
@@ -244,3 +244,116 @@ const calculatePath = (rowIndex, cellIndex, blockers) => {
 
   return cellToChange;
 };
+
+export const checkPossibleMoves = (playerPieces, blockers) => {
+  let moves = 0
+
+  playerPieces[1].forEach(cell => {
+    let coord = cell.split(",");
+    let availableNeighbours = getAvailableNeighbours(Number(coord[0]), Number(coord[1]), blockers);
+
+    availableNeighbours.forEach(neighbour => {
+      if (checkBlocker(neighbour, true, blockers) === true) {
+        moves += 1;
+      }
+    })
+    
+  })
+  return moves > 0
+}
+
+export const isArrayInArray = (arr, item) => {
+  var item_as_string = JSON.stringify(item);
+
+  var contains = arr.some(function(ele){
+    return JSON.stringify(ele) === item_as_string;
+  });
+  return contains;
+}
+
+const getAvailableNeighbours = (rowIndex, cellIndex, blockers) => {
+  let cellToChange = [];
+  let middle = Math.floor(height / 2);
+
+  let topLeftAdjustmentValue = 0;
+  let topRightAdjustmentValue = 0;
+  let botRightAdjustmentValue = 0;
+  let botLeftAdjustmentValue = 0;
+
+  for (let i = 1; i <2; i++) {
+
+  let rowUp = rowIndex - i;
+  if (rowUp >= 0) {
+    //top left
+    (rowUp < middle) & (rowUp !== rowIndex)
+      ? (topLeftAdjustmentValue += 1)
+      : doNothing();
+    let topLeftIndex = cellIndex - topLeftAdjustmentValue;
+      topLeftIndex >= 0
+      ? cellToChange.push([rowUp, cellIndex - topLeftAdjustmentValue])
+      : doNothing();
+
+    //top right
+    (rowUp >= middle) & (rowUp !== rowIndex)
+      ? (topRightAdjustmentValue += 1)
+      : doNothing();
+    let topRightIndex = cellIndex + topRightAdjustmentValue;
+    topRightIndex < rowsLengthList[rowUp]
+      ? cellToChange.push([rowUp, topRightIndex])
+      : doNothing();
+  }
+
+  // bot
+  let rowDown = rowIndex + i;
+  if (rowDown <= height) {
+    // bot right
+
+    (rowDown <= middle) & (rowDown !== rowIndex)
+      ? (botRightAdjustmentValue += 1)
+      : doNothing();
+    let botRightIndex = cellIndex + botRightAdjustmentValue;
+      botRightIndex < rowsLengthList[rowDown]
+      ? cellToChange.push([rowDown, botRightIndex])
+      : doNothing();
+
+    // bot left
+
+    (rowDown > middle) & (rowDown !== rowIndex)
+      ? (botLeftAdjustmentValue += 1)
+      : doNothing();
+    let botLeftIndex = cellIndex - botLeftAdjustmentValue;
+      botLeftIndex >= 0
+      ? cellToChange.push([rowDown, botLeftIndex])
+      : doNothing();
+  }
+
+  //left
+  let leftIndex = cellIndex - i;
+      leftIndex >= 0
+    ? cellToChange.push([rowIndex, leftIndex])
+    : doNothing();
+
+  //right
+  let rightIndex = cellIndex + i;
+      rightIndex < rowsLengthList[rowIndex]
+    ? cellToChange.push([rowIndex, rightIndex])
+    : doNothing();
+
+  }
+
+  return cellToChange;
+};
+
+export const updateTurn = () => {
+    socketSender.broadcastToAll({
+    type: "SKIP_TURN"
+  });
+}
+
+export const gameEnd = () => {
+  let newPhase = "gameEnd";
+    socketSender.broadcastToAll({
+      type: "CHANGE_PHASE",
+      payload:{newPhase}
+  });
+}

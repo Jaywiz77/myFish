@@ -43,6 +43,7 @@ function game(state=initialState, action) {
         currentSelected: [action.payload.rowIndex, action.payload.cellIndex],
         blockers: action.payload.blockers,
         playerPieces: action.payload.playerPieces,
+        playerInfo:action.payload.playerInfo,
         turn: state.turn += 1
       }
     case "MOVE_PIECE":
@@ -82,6 +83,11 @@ function game(state=initialState, action) {
       return {
         ...state,
         gamePhase:action.payload.newPhase
+      }
+    case "SKIP_TURN":
+      return {
+        ...state,
+        turn: state.turn += 1
       }
 
     default:
