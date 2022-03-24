@@ -22,10 +22,9 @@ let initialState = {
     blockers: [],
     turn: 0,
     gamePhase: "setPlayerPieces",
-    playerInfo:[["player1",[],0],["player2",[],0],["player3",[],0],["player4",[],0]], //[player,[pieces],points]
+    playerInfo:[], //[player,[pieces],points]
     highlightedPath:[],
-    player1: [],
-    player2: []
+    host: null
     
 }
 
@@ -89,7 +88,17 @@ function game(state=initialState, action) {
         ...state,
         turn: state.turn += 1
       }
-
+    case "ADD_PLAYER":
+      return {
+        ...state,
+        playerInfo: action.payload.playerInfo,
+        host:state.host || action.payload.playerInfo[3]
+      }
+    case "SET_HOST":
+      return {
+        ...state,
+        host:action.payload.host
+      }
     default:
       return state;
   }

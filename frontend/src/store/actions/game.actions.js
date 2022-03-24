@@ -28,7 +28,7 @@ export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,play
   blockers.push(`${rowIndex},${cellIndex}`);
 
   socketSender.broadcastToAll({
-    type: "SET_PIECE",
+    type: "SPIECE",
     payload: { newBoard, rowIndex, cellIndex,blockers,playerInfo }
   });
   
@@ -355,5 +355,26 @@ export const gameEnd = () => {
     socketSender.broadcastToAll({
       type: "CHANGE_PHASE",
       payload:{newPhase}
+  });
+}
+// [["player1",[],0],["player2",[],0],["player3",[],0],["player4",[],0]], //[player,[pieces],points]
+export const addPlayer = (playerId, planerName, playerInfo) => {
+
+  
+  let player = "player" + (playerInfo.length + 1);
+
+  playerInfo.push([player, [], 0, playerId, planerName]);
+
+
+  socketSender.broadcastToAll({
+      type: "ADD_PLAYER",
+      payload:{playerInfo}
+  });
+}
+
+export const setHost = (host) => {
+    socketSender.broadcastToAll({
+      type: "SET_HOST",
+      payload:{host}
   });
 }
