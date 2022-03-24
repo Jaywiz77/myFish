@@ -37,6 +37,8 @@
   background-repeat: no-repeat;
   background-size: 75%;
   background-position: center;
+  border-color: skyblue !important;
+  border-width: 5px !important;
 }
 
 .hex.player2 div {
@@ -44,8 +46,9 @@
   background-image: url("../public/images/penguin2.png");
   background-repeat: no-repeat;
   background-size: 75%;
-
   background-position: center;
+  border-color: palevioletred !important;
+  border-width: 5px !important;
 }
 
 .hex.player3 div {
@@ -53,8 +56,9 @@
   background-image: url("../public/images/penguin3.png");
   background-repeat: no-repeat;
   background-size: 75%;
-
   background-position: center;
+  border-color: limegreen !important;
+  border-width: 5px !important;
 }
 
 .hex.player4 div {
@@ -62,8 +66,9 @@
   background-image: url("../public/images/penguin4.png");
   background-repeat: no-repeat;
   background-size: 75%;
-
   background-position: center;
+  border-color: gold !important;
+  border-width: 5px !important;
 }
 
 .hex.white div {
@@ -129,4 +134,20 @@
   background-repeat: no-repeat;
   background-size: 80%;
   background-position: center;
+}
+
+.pb1 {
+  border: 3px solid skyblue;
+}
+
+.pb2 {
+  border: 3px solid palevioletred;
+}
+
+.pb3 {
+  border: 3px solid limegreen;
+}
+
+.pb4 {
+  border: 3px solid gold;
 }

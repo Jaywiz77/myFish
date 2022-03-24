@@ -4,9 +4,10 @@ import * as Actions from "../store/actions"
 
 
 const PlayerBoard = (playerInfo) => {
-    let penguin = "p"+playerInfo[0].substr(playerInfo[0].length - 1);
+    let penguin = "p" + playerInfo[0].substr(playerInfo[0].length - 1);
+    let container = "pb" + playerInfo[0].substr(playerInfo[0].length - 1);
     return (
-        <div style={{ minWidth: "30%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", border: "2px solid #4682b4", margin: 5 }}>
+        <div className={container} style={{ minWidth: "30%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", margin: 5 }}>
             <div className={ penguin } style={{height:50,width:50}}>
                 </div>
             <label>{playerInfo[0]}</label>
