@@ -28,7 +28,7 @@ export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,play
   blockers.push(`${rowIndex},${cellIndex}`);
 
   socketSender.broadcastToAll({
-    type: "SPIECE",
+    type: "SET_PIECE",
     payload: { newBoard, rowIndex, cellIndex,blockers,playerInfo }
   });
   
@@ -376,5 +376,13 @@ export const setHost = (host) => {
     socketSender.broadcastToAll({
       type: "SET_HOST",
       payload:{host}
+  });
+}
+
+export const changePlayPhase = () => {
+  let newPhase = "selectPiecePhase";
+    socketSender.broadcastToAll({
+      type: "CHANGE_PHASE",
+      payload:{newPhase}
   });
 }

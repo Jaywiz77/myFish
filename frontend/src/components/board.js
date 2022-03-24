@@ -3,6 +3,7 @@ import "../styles.css";
 import { Hex } from "./hex"
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
+import { act } from "react-dom/test-utils";
 const r = 100;
 
 
@@ -50,6 +51,9 @@ function Board(){
     if (gamePhase === "setPlayerPieces" && Actions.isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
 
       Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
+      if (turnNumber >= playerInfo.length * 2 -1) {
+        Actions.changePlayPhase();
+      }
 
     } else if (gamePhase === "selectPiecePhase") { //select pieces to move
       if (Actions.isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {

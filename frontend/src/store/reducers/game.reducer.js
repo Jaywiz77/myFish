@@ -22,7 +22,7 @@ let initialState = {
     blockers: [],
     turn: 0,
     gamePhase: "setPlayerPieces",
-    playerInfo:[], //[player,[pieces],points]
+    playerInfo:[], //[player,[pieces],points] [["player1",[],0,"id1","name1"],["player2",[],0,"id2","name2"],["player3",[],0,"id3","name3"],["player4",[],0,"id4","name4"]]
     highlightedPath:[],
     host: null
     
