@@ -2,6 +2,8 @@ import * as socketSender from "../../socket/socket.sender";
 
 
 export const SETUP_ID = "SETUP SOCKET ID";
+export const SYNC_STATE = "SYNC STATE";
+export const PLAYER_LEFT = "PLAYER LEFT";
 
 const boardItems = [["fish","white",1],["fish2","white",2], ["fish3","white",3]];
 const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];

@@ -92,13 +92,15 @@ function game(state=initialState, action) {
       return {
         ...state,
         playerInfo: action.payload.playerInfo,
-        host:state.host || action.payload.playerInfo[3]
+        host:state.host || action.payload.playerInfo[0][3]
       }
     case "SET_HOST":
       return {
         ...state,
         host:action.payload.host
       }
+    case Actions.SYNC_STATE:
+        return { ...action.game };
     default:
       return state;
   }
