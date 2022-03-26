@@ -385,3 +385,11 @@ export const changePlayPhase = () => {
       payload:{newPhase}
   });
 }
+
+export const changeSetPiecePhase = () => {
+  let newPhase = "setPlayerPieces";
+    socketSender.broadcastToAll({
+      type: "CHANGE_PHASE",
+      payload:{newPhase}
+  });
+}

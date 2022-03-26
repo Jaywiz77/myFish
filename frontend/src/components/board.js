@@ -4,6 +4,7 @@ import { Hex } from "./hex"
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
 import { act } from "react-dom/test-utils";
+import socket from "../socket";
 const r = 100;
 
 
@@ -21,7 +22,6 @@ function Board(){
   const turnNumber = useSelector((state) => state.game.turn);
   const playerTurn = turnNumber % playerInfo.length;
   // const id = useSelector((state) => state.game.SETUP_ID);
-  console.log(playerInfo);
   
   const checkMovable = () => {
     if (turnNumber >= 8  && Actions.checkPossibleMoves(playerInfo[playerTurn], blockers) === false) {
@@ -46,46 +46,47 @@ function Board(){
 
   const cellOnClick = (rowIndex, cellIndex, points) => {
 
-      // const playerTurn = turnNumber % playerInfo.length;
-
-    if (gamePhase === "setPlayerPieces" && Actions.isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
-
-      Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
-      if (turnNumber >= playerInfo.length * 2 -1) {
-        Actions.changePlayPhase();
-      }
-
-    } else if (gamePhase === "selectPiecePhase") { //select pieces to move
-      if (Actions.isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {
+    if (socket.id === playerInfo[playerTurn][3]) {
       
+    
 
+      if (gamePhase === "setPlayerPieces" && Actions.isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
+
+        Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
+        if (turnNumber >= playerInfo.length * 2 -1) {
+          Actions.changePlayPhase();
+        }
+
+      } else if (gamePhase === "selectPiecePhase") { //select pieces to move
+        if (Actions.isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {
+        
+
+          if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
+            Actions.clearSelectionDispatch(board);
+          
+          } else {
+
+            Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+
+          }
+        }
+        
+      } else if (gamePhase === "movePiecePhase") { //move selected pieces
         if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
-          Actions.clearSelectionDispatch(board);
+            // clearSelectionDispatch();
+            Actions.clearSelectionDispatch(board);
+          
+          } else if (currentSelected[0] !== "" && Actions.isArrayInArray(highlighted,[rowIndex,cellIndex])) {
+            // console.log(currentSelected);
+            Actions.movePlayerPiece(board,currentSelected, rowIndex, cellIndex,blockers,playerInfo,playerTurn,points);
+        } else if (Actions.isArrayInArray(playerInfo[playerTurn][1], `${rowIndex},${cellIndex}`)) {
+          console.log('----')
+            Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+          }
+
         
-        } else {
-
-          Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
-
         }
-      }
-      
-    } else if (gamePhase === "movePiecePhase") { //move selected pieces
-      console.log('==========')
-      if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
-          // clearSelectionDispatch();
-          Actions.clearSelectionDispatch(board);
-        
-        } else if (currentSelected[0] !== "" && Actions.isArrayInArray(highlighted,[rowIndex,cellIndex])) {
-          // console.log(currentSelected);
-          Actions.movePlayerPiece(board,currentSelected, rowIndex, cellIndex,blockers,playerInfo,playerTurn,points);
-      } else if (Actions.isArrayInArray(playerInfo[playerTurn][1], `${rowIndex},${cellIndex}`)) {
-        console.log('----')
-          Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
-        }
-
-      
-      }
-
+    } 
     
   } 
 

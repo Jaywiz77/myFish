@@ -21,10 +21,11 @@ let initialState = {
     outOfPlay: [],
     blockers: [],
     turn: 0,
-    gamePhase: "setPlayerPieces",
+    gamePhase: "waitingPhase",
     playerInfo:[], //[player,[pieces],points] [["player1",[],0,"id1","name1"],["player2",[],0,"id2","name2"],["player3",[],0,"id3","name3"],["player4",[],0,"id4","name4"]]
     highlightedPath:[],
-    host: null
+    host: null,
+    startBtn:false
     
 }
 
@@ -53,6 +54,7 @@ function game(state=initialState, action) {
         gamePhase: action.payload.nextPhase,
         blockers: action.payload.blockers,
         highlightedPath: [],
+        playerInfo:action.payload.playerInfo,
         playerPieces: action.payload.newPlayerPieces,
         turn:state.turn+=1
       }
@@ -81,7 +83,8 @@ function game(state=initialState, action) {
     case "CHANGE_PHASE":
       return {
         ...state,
-        gamePhase:action.payload.newPhase
+        gamePhase: action.payload.newPhase,
+        startBtn:true
       }
     case "SKIP_TURN":
       return {
@@ -102,7 +105,12 @@ function game(state=initialState, action) {
     case Actions.SYNC_STATE:
         return { ...action.game };
     case Actions.PLAYER_LEFT:
-        return state;
+      return state;
+    case "DISABLE_STARTBTN":
+      return {
+        ...state,
+        startBtn:true
+      }
     default:
       return state;
   }
