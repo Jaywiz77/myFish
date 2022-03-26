@@ -360,26 +360,23 @@ export const gameEnd = () => {
   });
 }
 // [["player1",[],0],["player2",[],0],["player3",[],0],["player4",[],0]], //[player,[pieces],points]
-export const addPlayer = (playerId, planerName, playerInfo) => {
+export const addPlayer = (playerId, playerName, playerInfo) => {
 
   
-  let player = "player" + (playerInfo.length + 1);
-
-  playerInfo.push([player, [], 0, playerId, planerName]);
-
-
+  let playerCount = "player" + (playerInfo.length + 1);
+  let player = [playerCount,[],0,playerId,playerName]
   socketSender.broadcastToAll({
       type: "ADD_PLAYER",
-      payload:{playerInfo}
+      payload:{player}
   });
 }
 
-export const setHost = (host) => {
-    socketSender.broadcastToAll({
-      type: "SET_HOST",
-      payload:{host}
-  });
-}
+// export const setHost = (host) => {
+//     socketSender.broadcastToAll({
+//       type: "SET_HOST",
+//       payload:{host}
+//   });
+// }
 
 export const changePlayPhase = () => {
   let newPhase = "selectPiecePhase";

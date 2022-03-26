@@ -21,7 +21,7 @@ function Board(){
   const turnNumber = useSelector((state) => state.game.turn);
   const playerTurn = turnNumber % playerInfo.length;
   // const id = useSelector((state) => state.game.SETUP_ID);
-
+  console.log(playerInfo);
   
   const checkMovable = () => {
     if (turnNumber >= 8  && Actions.checkPossibleMoves(playerInfo[playerTurn], blockers) === false) {

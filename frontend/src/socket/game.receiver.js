@@ -13,12 +13,12 @@ export default function registerGame(gameRef) {
 
         socket.on(GAME_EVENT, (action) => {
             switch (action.type) {
-                case "ADD_PLAYER":
+                case Actions.SETUP_ID:
                     console.log(gameRef.current.host, socket.id);
                     if (gameRef.current.host === socket.id) {
                         socket.emit(SPECIAL_EVENT, {
                             type: Actions.SYNC_STATE,
-                            playerid: action.payload.playerInfo[0][3],
+                            playerid: action.id,
                             game: gameRef,
                         });
                     }

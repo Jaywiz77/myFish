@@ -91,13 +91,13 @@ function game(state=initialState, action) {
     case "ADD_PLAYER":
       return {
         ...state,
-        playerInfo: action.payload.playerInfo,
-        host:state.host || action.payload.playerInfo[0][3]
+        playerInfo: [...state.playerInfo, action.payload.player],
+        host:state.host || action.payload.player[3]
       }
-    case "SET_HOST":
+    case Actions.SETUP_ID:
       return {
         ...state,
-        host:action.payload.host
+        host: state.host || action.payload.host
       }
     case Actions.SYNC_STATE:
         return { ...action.game };
