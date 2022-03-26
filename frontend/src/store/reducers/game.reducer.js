@@ -97,10 +97,12 @@ function game(state=initialState, action) {
     case Actions.SETUP_ID:
       return {
         ...state,
-        host: state.host || action.payload.host
+        host: state.host || action.id
       }
     case Actions.SYNC_STATE:
         return { ...action.game };
+    case Actions.PLAYER_LEFT:
+        return state;
     default:
       return state;
   }

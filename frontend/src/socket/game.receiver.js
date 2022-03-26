@@ -5,7 +5,7 @@ export default function registerGame(gameRef) {
     return (dispatch) => {
         // Socket.io will send socket info on connect
         socket.on("connect", () =>
-            dispatch({
+            socket.emit(GAME_EVENT, {
                 type: Actions.SETUP_ID,
                 id: socket.id,
             })
@@ -46,7 +46,7 @@ export default function registerGame(gameRef) {
 
         socket.on(DISCONNECT_EVENT, (id) => {
             // Delete game or pass host
-            dispatch({
+            socket.emit(DISCONNECT_EVENT, {
                 type: Actions.PLAYER_LEFT,
                 id,
             });
