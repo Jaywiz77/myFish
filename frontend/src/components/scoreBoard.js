@@ -41,7 +41,7 @@ const ScoreBoard = () => {
             <div style={{ width:"100%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" ,height:"45%",backgroundColor:"azure",marginLeft:10,maxHeight:350,paddingTop:20}}>
                 {gamePhase !== "waitingPhase" ? <label style={{ marginTop: 10 }}>{phase} </label> :""}
                 
-                { gamePhase === "gameEnd" ? <label>Player {playerInfo[winner][4]} Won</label> : ""}
+                { gamePhase === "gameEnd" ? <label  style={{fontSize:"30px"}}>Player {playerInfo[winner][4]} Won</label> : ""}
                 
                 {
                     gamePhase !== "waitingPhase" && gamePhase !== "gameEnd" ?
@@ -72,18 +72,18 @@ const ScoreBoard = () => {
             <div style={{ width: "100%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", backgroundColor: "azure", height: "45%", marginLeft: 10, maxHeight: 400, marginTop: 30, paddingTop:20 }}>
                 <label>How to play</label>
                 <label>The game is played in 2 Phases: </label>
-                <label>Set Piece Phase and Play Phase</label>
+                <label>Set Penguins Phase and Play Phase</label>
                 <br/>
                 <label>1. Set Piece Phase: </label>
-                <label>Set your pieces anywhere in the board</label>
-                <label>2 players: 4 Pieces each</label>
-                <label>3 players: 3 Pieces each</label>
-                <label>4 players: 2 Pieces each</label>
+                <label>Set your penguins <b>anywhere</b> on the board</label>
+                <label>2 players: 4 penguins each</label>
+                <label>3 players: 3 penguins each</label>
+                <label>4 players: 2 penguins each</label>
                 <br/>
                 <label>2. Play Phase</label>
                 <label>Take turns to move your pieces to collect points</label>
-                <label>You can only move in straight line to tiles connected</label>
-                <label>and not blocked by any penguins</label>
+                <label>You can only move to any tiles connected in a <b>straight line</b></label>
+                <label>and not blocked by any penguins or water</label>
                 <label>Each fish on the tiles = 1 point</label>
                 <label>Tiles disappear after penguins moved</label>
                 <br />

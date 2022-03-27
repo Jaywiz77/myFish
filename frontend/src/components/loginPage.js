@@ -12,8 +12,13 @@ const LoginPage = ({ setPage }) => {
 
     const playerInfo = useSelector((state) => state.game.playerInfo);
     const onClick = () => {
+        if (name !== "") {
         setPage("go Next");
-        Actions.addPlayer(socket.id, name, playerInfo);
+        Actions.addPlayer(socket.id, name, playerInfo);            
+        } else {
+            alert("Please enter your name");
+        }
+
     }   
     return (
         <div style={{ display: "flex", justifyContent: "center",height:"99vh" }}>
