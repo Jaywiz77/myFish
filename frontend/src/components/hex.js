@@ -1,4 +1,6 @@
+import {  useSelector } from "react-redux";
 export const Hex = props => {
+  const r = useSelector((state) => state.game.radius);
   const { test,side,color = "", ...divProps } = props;
   return (
     <div
@@ -7,8 +9,8 @@ export const Hex = props => {
       style={{
         //border: "1px solid #000",
         boxSizing: "border-box",
-        height: "100px",
-        width: "100px",
+        height: `${r}px`,
+        width: `${r}px`,
         ...props.style,
         position: "relative",
         borderRadius: "100%"
@@ -19,7 +21,7 @@ export const Hex = props => {
           borderTop: "1px solid #000",
           borderBottom: "1px solid #000",
           boxSizing: "border-box",
-          width: 100 / Math.sqrt(3) + "px",
+          width: r / Math.sqrt(3) + "px",
           height: "100%",
           margin: "0 auto",
           position: "absolute",
@@ -34,7 +36,7 @@ export const Hex = props => {
           borderTop: "1px solid #000",
           borderBottom: "1px solid #000",
           boxSizing: "border-box",
-          width: 100 / Math.sqrt(3) + "px",
+          width: r / Math.sqrt(3) + "px",
           height: "100%",
           margin: "0 auto",
           transform: "rotate(150deg)",
@@ -52,7 +54,7 @@ export const Hex = props => {
           borderTop: "1px solid #000",
           borderBottom: "1px solid #000",
           boxSizing: "border-box",
-          width: 100 / Math.sqrt(3) + "px",
+          width: r / Math.sqrt(3) + "px",
           height: "100%",
           margin: "0 auto",
           transform: "rotate(210deg)",

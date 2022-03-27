@@ -37,7 +37,8 @@
   background-repeat: no-repeat;
   background-size: 75%;
   background-position: center;
-  border-color: skyblue !important;
+  border-color: darkturquoise !important;
+  background-color: lightblue !important;
   border-width: 5px !important;
 }
 
@@ -48,6 +49,7 @@
   background-size: 75%;
   background-position: center;
   border-color: palevioletred !important;
+  background-color: lightpink !important;
   border-width: 5px !important;
 }
 
@@ -58,6 +60,7 @@
   background-size: 75%;
   background-position: center;
   border-color: limegreen !important;
+  background-color: lightgreen !important;
   border-width: 5px !important;
 }
 
@@ -68,6 +71,7 @@
   background-size: 75%;
   background-position: center;
   border-color: gold !important;
+  background-color: lightgoldenrodyellow !important;
   border-width: 5px !important;
 }
 
@@ -87,7 +91,7 @@
 }
 
 .hex:hover div {
-  border-color: #bb9 !important;
+  border-color: burlywood !important;
 }
 
 .hex:active div {
@@ -108,6 +112,7 @@
   background-image: url("../public/images/penguin1.png");
   transform: rotate(270deg);
   background-repeat: no-repeat;
+
   background-size: 80%;
   background-position: center;
 }
@@ -137,17 +142,21 @@
 }
 
 .pb1 {
-  border: 3px solid skyblue;
+  border: 3px solid darkturquoise;
+  background-color: lightblue !important;
 }
 
 .pb2 {
   border: 3px solid palevioletred;
+  background-color: lightpink !important;
 }
 
 .pb3 {
   border: 3px solid limegreen;
+  background-color: lightgreen !important;
 }
 
 .pb4 {
   border: 3px solid gold;
+  background-color: lightgoldenrodyellow !important;
 }

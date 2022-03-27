@@ -5,16 +5,23 @@ export const SETUP_ID = "SETUP SOCKET ID";
 export const SYNC_STATE = "SYNC STATE";
 export const PLAYER_LEFT = "PLAYER LEFT";
 
+
 const boardItems = [["fish","white",1],["fish2","white",2], ["fish3","white",3]];
-const rowsLengthList = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+const rowsLengthList = [6, 7, 8, 9, 10, 9, 8, 7, 6];
+// const rowsLengthList = [ 5,6, 7, 8, 9, 8, 7, 6,5];
 const height = rowsLengthList.length - 1;
-export const createBoard = () => {
-  const board = rowsLengthList.map((length) =>
+
+const randomizeBoard = () => {
+    const board = rowsLengthList.map((length) =>
     new Array(length)
       .fill()
       .map(() => boardItems[Math.floor(Math.random() * boardItems.length)])
   );
+  return board
+}
+export const createBoard = () => {
 
+  let board = randomizeBoard();
   socketSender.broadcastToAll({
     type: "SET_BOARD",
     payload: { board },
@@ -371,12 +378,6 @@ export const addPlayer = (playerId, playerName, playerInfo) => {
   });
 }
 
-// export const setHost = (host) => {
-//     socketSender.broadcastToAll({
-//       type: "SET_HOST",
-//       payload:{host}
-//   });
-// }
 
 export const changePlayPhase = () => {
   let newPhase = "selectPiecePhase";
@@ -386,10 +387,27 @@ export const changePlayPhase = () => {
   });
 }
 
-export const changeSetPiecePhase = () => {
-  let newPhase = "setPlayerPieces";
-    socketSender.broadcastToAll({
-      type: "CHANGE_PHASE",
-      payload:{newPhase}
+
+export const addPlayerWithoutMove = (player) => {
+
+      socketSender.broadcastToAll({
+      type: "ADD_PLAYERWITHOUTMOVE",
+      payload:{player}
   });
+  
+}
+
+export const setNewGame = (playerInfo) => {
+  let newPlayerInfo = [];
+  let board = randomizeBoard();
+  let newPhase = "setPlayerPieces";
+  playerInfo.forEach((player) => {
+    player[1] = [];
+    player[2] = 0;
+    newPlayerInfo.push(player);
+  })
+  socketSender.broadcastToAll({
+        type: "SET_NEW_GAME",
+        payload:{newPlayerInfo,board,newPhase}
+    });
 }

@@ -21,7 +21,8 @@ const LoginPage = ({ setPage }) => {
                 
                 <label>Enter Name</label>
                 <input type="text" value={name} onChange={handleChange}/>
-            <button onClick={onClick}>Submit</button>
+                <button disabled={playerInfo.length === 4} onClick={onClick}>Submit</button>
+                <label hidden={playerInfo.length !== 4}>Game is full</label>
             </div>
 
         </div>

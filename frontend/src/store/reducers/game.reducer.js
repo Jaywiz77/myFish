@@ -22,10 +22,12 @@ let initialState = {
     blockers: [],
     turn: 0,
     gamePhase: "waitingPhase",
-    playerInfo:[], //[player,[pieces],points] [["player1",[],0,"id1","name1"],["player2",[],0,"id2","name2"],["player3",[],0,"id3","name3"],["player4",[],0,"id4","name4"]]
+    playerInfo:[], //[player,[pieces],points,id,name]
     highlightedPath:[],
     host: null,
-    startBtn:false
+    startBtn: false,
+    playerWithoutMove: [],
+    radius:100,
     
 }
 
@@ -110,6 +112,26 @@ function game(state=initialState, action) {
       return {
         ...state,
         startBtn:true
+      }
+    case "ADD_PLAYERWITHOUTMOVE":
+      return {
+        ...state,
+        playerWithoutMove:[...state.playerWithoutMove,action.payload.player]
+      }
+    case "SET_NEW_GAME":
+      return {
+        ...state,
+        board: action.payload.board,
+        currentSide: "selected",
+        currentSelected: ["", ""],
+        gamePhase: action.payload.newPhase,
+        outOfPlay: [],
+        blockers: [],
+        turn: 0,
+        playerInfo:action.payload.newPlayerInfo,
+        highlightedPath:[],
+        playerWithoutMove:[]
+
       }
     default:
       return state;

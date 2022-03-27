@@ -5,13 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
 import { act } from "react-dom/test-utils";
 import socket from "../socket";
-const r = 100;
-
 
 function Board(){
-
+  const pieces = [0, 5, 4, 3, 2,2,2];
   // dispatch(Actions.createBoard());
-
+  const r = useSelector((state) => state.game.radius);
   const board = useSelector((state) => state.game.board);
   const currentSelected = useSelector((state) => state.game.currentSelected);
   const blockers = useSelector((state) => state.game.blockers);
@@ -21,16 +19,22 @@ function Board(){
   const playerInfo = useSelector((state) => state.game.playerInfo);
   const turnNumber = useSelector((state) => state.game.turn);
   const playerTurn = turnNumber % playerInfo.length;
+  const playerWithoutMove = useSelector((state) => state.game.playerWithoutMove);
   // const id = useSelector((state) => state.game.SETUP_ID);
   
   const checkMovable = () => {
     if (turnNumber >= 8  && Actions.checkPossibleMoves(playerInfo[playerTurn], blockers) === false) {
       console.log(playerInfo[playerTurn][0], "has no moves left");
-      if (turnNumber < 150) {
+      if (!playerWithoutMove.includes(playerInfo[playerTurn][0])) {
+        Actions.addPlayerWithoutMove(playerInfo[playerTurn][0]);
+      }
+      if (turnNumber < 150 && playerWithoutMove.length < playerInfo.length) {
         Actions.updateTurn();
       } else {
         Actions.gameEnd();
       }
+
+
       
     } 
   }
@@ -40,7 +44,14 @@ function Board(){
   }, []);
 
   useEffect(() => {
-     checkMovable();
+    if (playerInfo.length > 0  && socket.id === playerInfo[playerTurn][3]) {
+      checkMovable();
+    }
+
+    if (gamePhase !== "waitingPhase" && playerWithoutMove.length >= playerInfo.length) { 
+      Actions.gameEnd()
+    };
+     
   }, [turnNumber]);
 
 
@@ -53,7 +64,7 @@ function Board(){
       if (gamePhase === "setPlayerPieces" && Actions.isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
 
         Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
-        if (turnNumber >= playerInfo.length * 2 -1) {
+        if (turnNumber >= playerInfo.length * (pieces[playerInfo.length]) -1) {
           Actions.changePlayPhase();
         }
 
@@ -92,16 +103,27 @@ function Board(){
 
 
   return (
-    <div className="App" style={{ width: "1000px", marginTop: "35px" }}>
 
-      <div>
+    <div 
+      style={{
+        height: "98vh",
+        width: "70%",
+      }}>
+      <div               style={{
+        marginTop:"2vh",
+                // display: "flex",
+      justifyContent: "center",
+
+
+              }}>
         {board.map((row, rowIndex) => {
           return (
             <div
               style={{
                 marginTop: "-14px",
                 display: "flex",
-                justifyContent: "center"
+                justifyContent: "center",
+                
               }}
             >
               {row.map((cell, cellIndex) => (
@@ -119,7 +141,8 @@ function Board(){
           );
         })}
       </div>
-    </div>
+      </div>
+
   );
 }
 

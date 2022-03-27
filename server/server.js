@@ -1,7 +1,7 @@
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-
+const path = require("path");
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
@@ -12,6 +12,8 @@ const io = new Server(server, {
 });
 
 const gameport = process.env.PORT || 5000;
+
+app.use(express.static(path.join(__dirname, "build")));
 
 const GAME_EVENT = "GAME EVENT";
 const SPECIAL_EVENT = "SPECIAL EVENT";
