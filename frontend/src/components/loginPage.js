@@ -22,12 +22,16 @@ const LoginPage = ({ setPage }) => {
     }   
     return (
         <div style={{ display: "flex", justifyContent: "center",height:"99vh" }}>
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", border: "5px solid azure", height: "30%", marginTop: "10%", width: "300px" }}>
-                
-                <label>Enter Name</label>
-                <input type="text" value={name} onChange={handleChange}/>
-                <button disabled={playerInfo.length === 4} onClick={onClick}>Submit</button>
+            <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", marginTop: "10%", width: "380px" }}>
                 <label hidden={playerInfo.length !== 4}>Game is full</label>
+                <label style={{ fontSize: "20px", marginBottom: 130 }} ></label>
+                
+                <label style={{ fontSize: "15px", maxWidth: 200 }} >Enter Name</label>
+                <input  style={{width:200}} type="text" value={name} onChange={handleChange}/>
+                <button style={{width:100,marginTop:2}}disabled={playerInfo.length === 4} onClick={onClick}>Enter</button>
+                
+                            {/* <div className="pengu"  style={{height:100,width:100}}>
+                </div> */}
             </div>
 
         </div>

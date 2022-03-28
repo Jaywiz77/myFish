@@ -44,12 +44,14 @@ export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,play
 }
 
 export const movePlayerPiece = (board,currentSelected,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
-
   // let newBoard = board;
   board[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  // board[rowIndex][cellIndex][1] = "moved";
+  // console.log(board)
   // console.log("movee");
   board[currentSelected[0]][currentSelected[1]][0] = "nothing"; 
   let newBoard = clearSelection(board);
+  newBoard[rowIndex][cellIndex][1] = "moved";
   let nextPhase = "selectPiecePhase";
   playerInfo[playerTurn][1] = playerInfo[playerTurn][1].filter(function (e) { return e !== `${currentSelected[0]},${currentSelected[1]}` })
   playerInfo[playerTurn][1].push(`${rowIndex},${cellIndex}`)

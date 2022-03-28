@@ -81,7 +81,10 @@
 .hex.selected div {
   background-color: lightsteelblue;
 }
-
+.hex.moved div {
+  background-color: lightslategray !important;
+  /* border-width: 15px !important; */
+}
 .hex.nothing div {
   background-color: #4682b4;
   background-image: url("../public/images/sea.png");
@@ -159,4 +162,11 @@
 .pb4 {
   border: 3px solid gold;
   background-color: lightgoldenrodyellow !important;
+}
+
+.pengu {
+  background-image: url("../public/images/pengu1.gif");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
 }
