@@ -11,6 +11,7 @@ const LoginPage = ({ setPage }) => {
     }
 
     const playerInfo = useSelector((state) => state.game.playerInfo);
+    const gamePhase = useSelector((state) => state.game.gamePhase);
     const onClick = () => {
         if (name !== "") {
         setPage("go Next");
@@ -23,12 +24,12 @@ const LoginPage = ({ setPage }) => {
     return (
         <div style={{ display: "flex", justifyContent: "center",height:"99vh" }}>
             <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", marginTop: "10%", width: "380px" }}>
-                <label hidden={playerInfo.length !== 4}>Game is full</label>
+                <label hidden={playerInfo.length !== 4 && (gamePhase === "waitingPhase" || gamePhase === "gameEnd") }>Game is full</label>
                 <label style={{ fontSize: "20px", marginBottom: 130 }} ></label>
                 
                 <label style={{ fontSize: "15px", maxWidth: 200 }} >Enter Name</label>
                 <input  style={{width:200}} type="text" value={name} onChange={handleChange}/>
-                <button style={{width:100,marginTop:2}}disabled={playerInfo.length === 4} onClick={onClick}>Enter</button>
+                <button style={{width:100,marginTop:2}} disabled={playerInfo.length === 4 || (gamePhase !== "waitingPhase" && gamePhase !== "gameEnd")}  onClick={onClick}>Enter</button>
                 
                             {/* <div className="pengu"  style={{height:100,width:100}}>
                 </div> */}
