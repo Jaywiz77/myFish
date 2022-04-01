@@ -31,6 +31,15 @@ io.on("connection", socket => {
         io.emit(GAME_EVENT, action)
     });
 
+    socket.on("playClick", action => {
+        io.emit("playClick",action);
+    });
+
+        socket.on("playMove",action => {
+        io.emit("playMove",action);
+    });
+
+
     socket.on(SPECIAL_EVENT, action => {
         switch (action.type) {
             case specialEvents.SYNC_STATE:
@@ -43,6 +52,7 @@ io.on("connection", socket => {
                 break;
         }
     });
+
 
     // When client disconnects
     socket.on("disconnecting", () => {

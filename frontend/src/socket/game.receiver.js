@@ -46,7 +46,7 @@ export default function registerGame(gameRef) {
 
         socket.on(DISCONNECT_EVENT, (id) => {
             // Delete game or pass host
-            socket.emit(DISCONNECT_EVENT, {
+            dispatch({
                 type: Actions.PLAYER_LEFT,
                 id,
             });

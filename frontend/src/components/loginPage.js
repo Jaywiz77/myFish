@@ -4,6 +4,14 @@ import * as Actions from "../store/actions"
 import Board from "./board";
 import ScoreBoard from "./scoreBoard";
 import socket from '../socket';
+
+const textStyle = {
+    fontSize: "15px",
+    margin: 5,
+    fontWeight: "bold",
+    color: "white"
+}
+
 const LoginPage = ({ setPage }) => {
     const [name, setName] = useState("");
     const handleChange = (event) => {
@@ -22,8 +30,8 @@ const LoginPage = ({ setPage }) => {
 
     }   
     return (
-        <div style={{ display: "flex", justifyContent: "center",height:"99vh" }}>
-            <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", marginTop: "10%", width: "380px" }}>
+        <div style={{ display: "flex",flexDirection:"column", alignItems:"center",justifyContent: "center",height:"98vh" }}>
+            <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", width: "380px" }}>
                 <label hidden={playerInfo.length !== 4 && (gamePhase === "waitingPhase" || gamePhase === "gameEnd") }>Game is full</label>
                 <label style={{ fontSize: "20px", marginBottom: 130 }} ></label>
                 
@@ -33,6 +41,18 @@ const LoginPage = ({ setPage }) => {
                 
                             {/* <div className="pengu"  style={{height:100,width:100}}>
                 </div> */}
+            </div>
+            <div style={{ display: "flex", flexWrap:"wrap", flexDirection: "row", textAlign: "center", alignContent: "center", justifyContent: "center", border: "5px solid azure", minHeight: 60, width: "380px" }}>
+                <label style={textStyle} >Current Players : </label>
+                
+                {
+                        playerInfo.map((player) => {
+                            return (
+                                <label style={textStyle} >{player[4]}</label>
+                                
+                            )
+                        })
+                    }
             </div>
 
         </div>

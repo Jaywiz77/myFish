@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
 
 
-const PlayerBoard = (playerInfo) => {
-    let penguin = "p" + playerInfo[0].substr(playerInfo[0].length - 1);
-    let container = "pb" + playerInfo[0].substr(playerInfo[0].length - 1);
+const PlayerBoard = (playerInfo,index) => {
+    // let penguin = "p" + playerInfo[0].substr(playerInfo[0].length - 1);
+    let penguin = "p" + (index + 1);
+    let container = "pb" +  (index + 1);
+    // let container = "pb" + playerInfo[0].substr(playerInfo[0].length - 1);
     return (
         <div className={container} style={{ minWidth: "30%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", margin: 5 }}>
             <div className={ penguin } style={{height:50,width:50}}>

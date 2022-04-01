@@ -3,10 +3,22 @@ import "../styles.css";
 import { Hex } from "./hex"
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "../store/actions"
-import { act } from "react-dom/test-utils";
+// import { act } from "react-dom/test-utils";
 import socket from "../socket";
 
-function Board(){
+import click1 from '../sounds/click.wav';
+import move2 from '../sounds/move1.wav';
+
+const audio = new Audio();
+
+// const BoopButton = () => {
+//   const [play] = useSound(click1);
+
+//   return <button onClick={play}>Boop!</button>;
+// };
+function Board() {
+  // const [playClick] = useSound(click1,{ volume: 0.5 });
+  // const [playMove] = useSound(move1,{ volume: 0.5 });
   const pieces = [0, 5, 4, 3, 2,2,2];
   // dispatch(Actions.createBoard());
   const r = useSelector((state) => state.game.radius);
@@ -39,11 +51,28 @@ function Board(){
     } 
   }
 
-    useEffect(() => {
-    Actions.createBoard();
+
+  useEffect(() => {
+      
+  function playAudio() {
+    audio.src = click1;
+    audio.play();
+    }
+
+    function playAudio2() {
+    audio.src = move2;
+    audio.play();
+        // console.log('sdfsdfsdfd')
+    }
+    socket.on('playClick', playAudio);
+    socket.on('playMove', playAudio2);
+      Actions.createBoard();
+          
+    
   }, []);
 
   useEffect(() => {
+
     if (playerInfo.length > 0  && socket.id === playerInfo[playerTurn][3]) {
       checkMovable();
     }
@@ -56,22 +85,23 @@ function Board(){
 
 
   const cellOnClick = (rowIndex, cellIndex, points) => {
-
+    
     if (socket.id === playerInfo[playerTurn][3]) {
       
     
 
       if (gamePhase === "setPlayerPieces" && Actions.isArrayInArray(blockers,`${rowIndex},${cellIndex}`) === false) { //set player pieces 
-
+        socket.emit('playClick',"");
         Actions.addPlayerPiece(board, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
         if (turnNumber >= playerInfo.length * (pieces[playerInfo.length]) -1) {
           Actions.changePlayPhase();
         }
 
       } else if (gamePhase === "selectPiecePhase") { //select pieces to move
-        if (Actions.isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {
         
-
+        if (Actions.isArrayInArray(playerInfo[playerTurn][1],`${rowIndex},${cellIndex}`)) {
+          
+          socket.emit('playClick',"");
           if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
             Actions.clearSelectionDispatch(board);
           
@@ -85,14 +115,17 @@ function Board(){
       } else if (gamePhase === "movePiecePhase") { //move selected pieces
         if (rowIndex === currentSelected[0] && currentSelected[1] === cellIndex) {
             // clearSelectionDispatch();
-            Actions.clearSelectionDispatch(board);
+          Actions.clearSelectionDispatch(board);
           
           } else if (currentSelected[0] !== "" && Actions.isArrayInArray(highlighted,[rowIndex,cellIndex])) {
             // console.log(currentSelected);
-            Actions.movePlayerPiece(board,currentSelected, rowIndex, cellIndex,blockers,playerInfo,playerTurn,points);
+          socket.emit('playMove',"");
+          Actions.movePlayerPiece(board, currentSelected, rowIndex, cellIndex, blockers, playerInfo, playerTurn, points);
+          // playMove();
         } else if (Actions.isArrayInArray(playerInfo[playerTurn][1], `${rowIndex},${cellIndex}`)) {
-          console.log('----')
-            Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+          // playClick()
+          Actions.selectedAction(board, currentSide, rowIndex, cellIndex, blockers, currentSelected);
+          socket.emit('playClick',"");
           }
 
         
@@ -141,6 +174,7 @@ function Board(){
           );
         })}
       </div>
+      {/* <BoopButton/> */}
       </div>
 
   );

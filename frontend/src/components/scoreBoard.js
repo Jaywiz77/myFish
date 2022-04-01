@@ -58,9 +58,9 @@ const ScoreBoard = () => {
                 <button hidden={ gamePhase === "waitingPhase" || gamePhase === "gameEnd"|| playerWithoutMove.length < playerInfo.length - 1} style={{margin:5}} onClick={() => { Actions.gameEnd() }}>End Game</button>
                 <div style={{display:"flex", margin:15, flexWrap:"wrap",justifyContent:"center"}}>
                     {
-                        playerInfo.map((player) => {
+                        playerInfo.map((player,index) => {
                             return (
-                                PlayerBoard(player)
+                                PlayerBoard(player,index)
                         
                             )
                         })

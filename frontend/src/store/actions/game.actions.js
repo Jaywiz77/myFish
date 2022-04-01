@@ -1,6 +1,5 @@
 import * as socketSender from "../../socket/socket.sender";
 
-
 export const SETUP_ID = "SETUP SOCKET ID";
 export const SYNC_STATE = "SYNC STATE";
 export const PLAYER_LEFT = "PLAYER LEFT";
@@ -31,7 +30,8 @@ export const createBoard = () => {
 export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
 
   const newBoard = board;
-  newBoard[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  // newBoard[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  newBoard[rowIndex][cellIndex][0] = "player" + (playerTurn+1);
   playerInfo[playerTurn][1].push(`${rowIndex},${cellIndex}`);
   playerInfo[playerTurn][2] += points;
   blockers.push(`${rowIndex},${cellIndex}`);
@@ -45,7 +45,8 @@ export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,play
 
 export const movePlayerPiece = (board,currentSelected,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
   // let newBoard = board;
-  board[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  // board[rowIndex][cellIndex][0] = playerInfo[playerTurn][0];
+  board[rowIndex][cellIndex][0] = "player" + (playerTurn+1);
   // board[rowIndex][cellIndex][1] = "moved";
   // console.log(board)
   // console.log("movee");

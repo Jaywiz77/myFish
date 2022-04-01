@@ -1,6 +1,7 @@
 import { act } from 'react-dom/test-utils';
 import * as Actions from '../actions';
 
+
 const initialBoard = [
   [["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0], ["white", "white",0]],
   [["white", "white",0], ["white", "white",0], ["white", "white",0], ["player1", "white",0], ["white", "white",0],["white", "white",0]],
@@ -107,7 +108,11 @@ function game(state=initialState, action) {
     case Actions.SYNC_STATE:
         return { ...action.game };
     case Actions.PLAYER_LEFT:
-      return state;
+      console.log(state.playerInfo);
+      return {
+        ...state,
+        playerInfo: state.playerInfo.filter(function (e) { return e[3] !== action.id })
+      }
     case "DISABLE_STARTBTN":
       return {
         ...state,
