@@ -103,12 +103,8 @@
 
 .bg {
   background-color: #4682b4;
-  height: 100vh;
-}
-
-.bar {
-  /* background-color: 0818a8; */
-  height: 2vh;
+  height: "100%";
+  min-height: 100vh;
 }
 
 .p1 {

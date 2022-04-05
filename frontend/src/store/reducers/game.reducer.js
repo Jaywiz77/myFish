@@ -28,7 +28,7 @@ let initialState = {
     host: null,
     startBtn: false,
     playerWithoutMove: [],
-    radius:100,
+    radius:80, //35
     
 }
 

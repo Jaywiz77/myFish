@@ -30,8 +30,8 @@ const LoginPage = ({ setPage }) => {
 
     }   
     return (
-        <div style={{ display: "flex",flexDirection:"column", alignItems:"center",justifyContent: "center",height:"98vh" }}>
-            <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", width: "380px" }}>
+        <div style={{ display: "flex",flexDirection:"column", alignItems:"center",justifyContent: "center",height:"100%" }}>
+            <div className="pengu" style={{ display: "flex", flexDirection: "column",alignItems:"center", textAlign:"center",marginTop:"10%",alignContent:"center",justifyContent: "center", border: "5px solid azure", minHeight:200,height: "25%", width: "350px" }}>
                 <label hidden={playerInfo.length !== 4 && (gamePhase === "waitingPhase" || gamePhase === "gameEnd") }>Game is full</label>
                 <label style={{ fontSize: "20px", marginBottom: 130 }} ></label>
                 
@@ -42,7 +42,7 @@ const LoginPage = ({ setPage }) => {
                             {/* <div className="pengu"  style={{height:100,width:100}}>
                 </div> */}
             </div>
-            <div style={{ display: "flex", flexWrap:"wrap", flexDirection: "row", textAlign: "center", alignContent: "center", justifyContent: "center", border: "5px solid azure", minHeight: 60, width: "380px" }}>
+            <div style={{ display: "flex", flexWrap:"wrap", flexDirection: "row", textAlign: "center", alignContent: "center", justifyContent: "center", border: "5px solid azure", minHeight: 60, width: "350px" }}>
                 <label style={textStyle} >Current Players : </label>
                 
                 {

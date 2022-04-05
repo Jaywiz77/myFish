@@ -13,7 +13,6 @@ function App() {
     <Provider store={store}>
       <SocketReceiver />
       <div className="App bg">
-        <div className="bar"></div>
         { page === "login" ?<LoginPage setPage={setPage}/> : <GameRoom/> }
       </div>
       

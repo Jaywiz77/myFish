@@ -9,7 +9,7 @@ const PlayerBoard = (playerInfo,index) => {
     let container = "pb" +  (index + 1);
     // let container = "pb" + playerInfo[0].substr(playerInfo[0].length - 1);
     return (
-        <div className={container} style={{ minWidth: "30%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", margin: 5 }}>
+        <div className={container} style={{ minWidth: "20%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", margin: 5 }}>
             <div className={ penguin } style={{height:50,width:50}}>
                 </div>
             <label>{playerInfo[4]}</label>

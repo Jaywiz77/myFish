@@ -1,7 +1,8 @@
 import {  useSelector } from "react-redux";
 export const Hex = props => {
-  const r = useSelector((state) => state.game.radius);
-  const { test,side,color = "", ...divProps } = props;
+  
+  const { side, radius, color = "", ...divProps } = props;
+  const r = radius;
   return (
     <div
       {...divProps}

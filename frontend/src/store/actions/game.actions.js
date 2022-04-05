@@ -26,6 +26,7 @@ export const createBoard = () => {
     payload: { board },
   });
 };
+
   
 export const addPlayerPiece = (board,rowIndex,cellIndex,blockers,playerInfo,playerTurn,points) => {
 

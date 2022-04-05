@@ -19,9 +19,14 @@ const audio = new Audio();
 function Board() {
   // const [playClick] = useSound(click1,{ volume: 0.5 });
   // const [playMove] = useSound(move1,{ volume: 0.5 });
-  const pieces = [0, 5, 4, 3, 2,2,2];
+  const pieces = [0, 5, 4, 3, 2,2,2,1,1];
   // dispatch(Actions.createBoard());
-  const r = useSelector((state) => state.game.radius);
+  // const r = useSelector((state) => state.game.radius);
+  let r = 35;
+
+  let winWidth = window.innerWidth;
+  winWidth > 500 ? r = 90 : r=35;
+
   const board = useSelector((state) => state.game.board);
   const currentSelected = useSelector((state) => state.game.currentSelected);
   const blockers = useSelector((state) => state.game.blockers);
@@ -137,23 +142,17 @@ function Board() {
 
   return (
 
-    <div 
-      style={{
-        height: "98vh",
-        width: "70%",
-      }}>
-      <div               style={{
-        marginTop:"2vh",
-                // display: "flex",
-      justifyContent: "center",
 
+      <div               style={{
+                // display: "flex",
+              marginTop:"2%", minWidth: "70%"
 
               }}>
         {board.map((row, rowIndex) => {
           return (
             <div
               style={{
-                marginTop: "-14px",
+                marginTop: r > 35 ? "-12px" : "-5px",//-6
                 display: "flex",
                 justifyContent: "center",
                 
@@ -164,7 +163,7 @@ function Board() {
                   id={`${rowIndex},${cellIndex}`}
                   side={cell[0]}
                   color={cell[1]}
-                  test="23"
+                  radius={r}
                   key={`${rowIndex},${cellIndex}`}
                   style={{ height: `${r}px`, width: `${r}px` }}
                   onClick={ ()=> cellOnClick(rowIndex,cellIndex,cell[2])}
@@ -173,7 +172,6 @@ function Board() {
             </div>
           );
         })}
-      </div>
       {/* <BoopButton/> */}
       </div>
 
