@@ -40,7 +40,7 @@ const ScoreBoard = () => {
         <div style={{ minWidth: "30%", display: "flex" ,flexDirection:"column", height:"100%"}}>
 
         
-            <div style={{ width:"100%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" ,height:"35%",backgroundColor:"azure",maxHeight:350,paddingTop:10}}>
+            <div style={{ width:"100%",minWidth:300, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" ,height:"35%",backgroundColor:"azure",maxHeight:350,paddingTop:10}}>
                 {gamePhase !== "waitingPhase" ? <label style={{ marginTop: 10 }}>{phase} </label> :""}
                 
                 { gamePhase === "gameEnd" ? <label  style={{fontSize:"30px"}}>Player {playerInfo[winner][4]} Won</label> : ""}
